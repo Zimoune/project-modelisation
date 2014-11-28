@@ -26,7 +26,7 @@ import fr.minestate.models.ModelVolume;
 import fr.minestate.models.VolumeChangerModel;
 import fr.minestate.mouvement.MouvementVolume;
 import fr.minestate.utils.FiltreSimple;
-import fr.minestate.utils.GtsParser;
+import fr.minestate.utils.LireGts;
 
 /**
  * Permet de definir la barre de menu en haut de l'ecran
@@ -172,7 +172,7 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 					e1.printStackTrace();
 				}
 			if(estGts2){
-				ModelVolume vm = GtsParser.getVolumeFromFile(fichier2);
+				ModelVolume vm = LireGts.getVolumeFromFile(fichier2);
 				JPanel pan = this.ms.getPan();
 				VueVolume vv = new VueVolume();
 				vv.setBounds(0, 0, 1024, 700);

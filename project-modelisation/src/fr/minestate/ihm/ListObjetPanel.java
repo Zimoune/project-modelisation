@@ -17,7 +17,7 @@ import fr.minestate.bdd.Connexion;
 import fr.minestate.exception.FichierException;
 import fr.minestate.models.ModelVolume;
 import fr.minestate.mouvement.MouvementVolume;
-import fr.minestate.utils.GtsParser;
+import fr.minestate.utils.LireGts;
 import fr.minestate.vue.Fenetre;
 import fr.minestate.vue.VueVolume;
 
@@ -138,7 +138,7 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		if (estGts2) {
-			ModelVolume vm = GtsParser.getVolumeFromFile(fichier2);
+			ModelVolume vm = LireGts.getVolumeFromFile(fichier2);
 
 			JPanel pan = this.ms.getPan();
 			VueVolume vv = new VueVolume();

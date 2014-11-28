@@ -18,7 +18,7 @@ import fr.minestate.models.VolumeChangerModel;
  * @author scta
  *
  */
-public class GtsParser {
+public class LireGts {
 	public ModelVolume volume;
 	public VolumeChangerModel volumeModel;
 
@@ -26,7 +26,7 @@ public class GtsParser {
 	 * Permet de definir un GtsParser selon un volumeModel
 	 * @param volumeModel le volumeModel selon lequel on souhaite definir le gtsParser
 	 */
-	public GtsParser(VolumeChangerModel volumeModel) {
+	public LireGts(VolumeChangerModel volumeModel) {
 		this.volumeModel = volumeModel;
 	}
 
