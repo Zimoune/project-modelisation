@@ -16,7 +16,9 @@ import javax.swing.JPanel;
 import fr.minestate.bdd.Connexion;
 import fr.minestate.exception.FichierException;
 import fr.minestate.models.ModelVolume;
-import fr.minestate.mouvement.MouvementVolume;
+import fr.minestate.modif.DeplacerVolume;
+import fr.minestate.modif.Rotation;
+import fr.minestate.modif.Translation;
 import fr.minestate.utils.LireGts;
 import fr.minestate.vue.Fenetre;
 import fr.minestate.vue.VueVolume;
@@ -90,6 +92,7 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			Connexion con = new Connexion();
 			String chemin = con.getCheminObjet(this.comboBox.getSelectedItem()
 					.toString());
+			System.out.println("Chemin " + chemin);
 			this.loadFile(chemin);
 			con.closeConnexion();
 			this.revalidate();
@@ -123,7 +126,6 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 	 */
 	private void loadFile(String lien) {
 		boolean estGts2 = false;
-		// Récupération du fichier
 		File fichier2 = new File(lien);
 		String extension2 = fichier2.getName().substring(
 				fichier2.getName().length() - 4, fichier2.getName().length());
@@ -137,6 +139,11 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			}
 		if (estGts2) {
 			ModelVolume vm = LireGts.lireFichier(fichier2);
+			vm.setRotation(Rotation.X_AXIS, 180);
+			vm.setTranslation(Translation.X_AXIS, 1024 / 2);
+			vm.setTranslation(Translation.Y_AXIS, 700 / 2);
+			
+			vm.z(42);
 
 			JPanel pan = this.fen.getPan();
 			VueVolume vue = new VueVolume();
@@ -144,8 +151,8 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			vue.suppMouvementListener();
 			vue.suppMouseWheel();
 			vue.setVolumeModel(vm);
-			vue.addMouseMotionListener(MouvementVolume.getMouseController(vm));
-			vue.addMouseWheelListener(MouvementVolume
+			vue.addMouseMotionListener(DeplacerVolume.getMouseController(vm));
+			vue.addMouseWheelListener(DeplacerVolume
 					.getMouseWheelController(vm));
 			vue.setVisible(true);
 			vue.setBackground(Color.gray);
@@ -153,11 +160,13 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			pan.setLayout(null);
 			vue.revalidate();
 			pan.removeAll();
+			pan.add(vue);
 			pan.repaint();
 			this.fen.setPan(pan);
 			this.fen.add(this.fen.getPan());
 			this.fen.getPan().repaint();
 			this.fen.revalidate();
+
 		}
 	}
 

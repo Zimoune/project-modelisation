@@ -1,16 +1,16 @@
-package fr.minestate.mouvement;
+package fr.minestate.modif;
 
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+
 import fr.minestate.models.ModelVolume;
-import fr.minestate.modif.Matrice;
-import fr.minestate.modif.Rotation;
-import fr.minestate.modif.Translation;
+import fr.minestate.utils.Point;
 
 /**
  * Permet de controler un volume
@@ -18,11 +18,12 @@ import fr.minestate.modif.Translation;
  * @author scta
  *
  */
-public class MouvementVolume {
+public class DeplacerVolume {
 
 	public static int xSouris;
 	public static int ySouris;
-
+	private static int l = 1024;
+	private static int h = 700;
 	private static JComponent panel;
 	@SuppressWarnings("unused")
 	private static ModelVolume model;
@@ -34,6 +35,7 @@ public class MouvementVolume {
 	 *            le VolumeModel dont on veut recuperer le MouseMotionListener
 	 * @return son MouseMotionListener
 	 */
+
 	public static MouseMotionListener getMouseController(final ModelVolume vol) {
 		return new MouseMotionListener() {
 			@Override
@@ -41,6 +43,26 @@ public class MouvementVolume {
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					vol.translation(Translation.X_AXIS, e.getX() - xSouris);
 					vol.translation(Translation.Y_AXIS, e.getY() - ySouris);
+					
+					if (xSouris >= l) {
+						System.out.println("On ne s'enfuit pas ! ");
+						vol.setTranslation(Translation.X_AXIS, 512);
+					}
+					
+					if (xSouris <= 0) {
+						System.out.println("Reviens-ici !");
+						vol.setTranslation(Translation.X_AXIS, 512);
+					}
+					
+					if (ySouris <= 0) {
+						System.out.println("On ne sort pas du cadre ! ");
+						vol.setTranslation(Translation.Y_AXIS, 350);
+					}
+					
+					if (ySouris >= h) {
+						System.out.println("On ne s'échappe pas ! ");
+						vol.setTranslation(Translation.Y_AXIS, 350);
+					}
 				}
 
 				if (SwingUtilities.isRightMouseButton(e)) {
@@ -79,7 +101,7 @@ public class MouvementVolume {
 		return new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				vol.zoom(e.getWheelRotation() * -5);
+				vol.z(e.getWheelRotation() * -5);
 			}
 		};
 	}
@@ -89,13 +111,14 @@ public class MouvementVolume {
 	 * @param panel le nouveau panel
 	 */
 	public static void setPanel(JComponent panel) {
-		MouvementVolume.panel = panel;
+		DeplacerVolume.panel = panel;
 	}
 
 	/**
 	 * Permet de definir le meilleur zoom pour un VolumeModel
 	 * @param model le VolumeModel dont on veut connaitre le meilleur zoom possible
 	 */
+	/*
 	public static void optimalZoom(ModelVolume model) {
 		optimalZoom(model, panel.getSize());
 	}
@@ -105,7 +128,8 @@ public class MouvementVolume {
 	 * @param model le VolumeModel dont on veut connaitre le meilleur zoom
 	 * @param dimension les dimensions
 	 */
+	/*
 	public static void optimalZoom(ModelVolume model, Dimension dimension) {
-		model.zoom(dimension);
-	}
+		model.z(dimension);
+	}*/
 }

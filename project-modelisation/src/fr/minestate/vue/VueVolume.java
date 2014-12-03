@@ -25,13 +25,13 @@ public class VueVolume extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private ModelVolume volumeModel;
+	private ModelVolume modelVolume;
 	
 	/**
 	 * Permet d'initialser un VolumeView sans parametre
 	 */
 	public VueVolume() {
-		volumeModel = new ModelVolume();
+		modelVolume = new ModelVolume();
 	}
 	
 	/**
@@ -40,18 +40,18 @@ public class VueVolume extends JPanel implements Observer {
 	 */
 	public VueVolume(ModelVolume v) {
 		add(new JLabel(v.getName()));
-		this.volumeModel = v;
-		this.volumeModel.addObserver(this);
+		this.modelVolume = v;
+		this.modelVolume.addObserver(this);
 	}
 	
 	/**
-	 * Permet de changer le volumeModel
-	 * @param le nouveau volumeModel
+	 * Permet de changer le modelVolume
+	 * @param le nouveau modelVolume
 	 */
-	public void setVolumeModel(ModelVolume volumeModel) {
-		volumeModel.deleteObservers();
-		this.volumeModel = volumeModel;
-		this.volumeModel.addObserver(this);
+	public void setVolumeModel(ModelVolume modelVolume) {
+		modelVolume.deleteObservers();
+		this.modelVolume = modelVolume;
+		this.modelVolume.addObserver(this);
 		repaint();
 	}
 	
@@ -61,7 +61,7 @@ public class VueVolume extends JPanel implements Observer {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);		
-		Collection<Face> triangles = volumeModel.retourneListeTriangles();
+		Collection<Face> triangles = modelVolume.retourneListeTriangles();
 		for (Face t : triangles) 
 			dessineTriangle(t, g);
 	}
@@ -76,9 +76,9 @@ public class VueVolume extends JPanel implements Observer {
 		Polygon p = new Polygon();
 		for (Point m : points) 
 			p.addPoint((int) (m.getX()),(int)m.getY());
-		g.setColor(Color.orange);
+		g.setColor(Color.red);
 		g.fillPolygon(p);
-		g.setColor(Color.blue);
+		g.setColor(Color.black);
 		g.drawPolygon(p);
 	}
 	

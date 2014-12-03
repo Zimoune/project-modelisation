@@ -12,7 +12,7 @@ import fr.minestate.bdd.Connexion;
 import fr.minestate.exception.FichierException;
 import fr.minestate.models.ModelVolume;
 import fr.minestate.models.VolumeChangerModel;
-import fr.minestate.mouvement.MouvementVolume;
+import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.LireGts;
 
 /**
@@ -74,8 +74,8 @@ public class Fenetre extends JFrame {
 			vue.suppMouvementListener();
 			vue.suppMouseWheel();
 			vue.setVolumeModel(vm);
-			vue.addMouseMotionListener(MouvementVolume.getMouseController(vm));
-			vue.addMouseWheelListener(MouvementVolume
+			vue.addMouseMotionListener(DeplacerVolume.getMouseController(vm));
+			vue.addMouseWheelListener(DeplacerVolume
 					.getMouseWheelController(vm));
 			vue.setVisible(true);
 			vue.setBackground(Color.gray);

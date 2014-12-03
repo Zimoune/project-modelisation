@@ -24,7 +24,7 @@ import fr.minestate.exception.FichierException;
 import fr.minestate.ihm.ListObjetPanel;
 import fr.minestate.models.ModelVolume;
 import fr.minestate.models.VolumeChangerModel;
-import fr.minestate.mouvement.MouvementVolume;
+import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.FiltreSimple;
 import fr.minestate.utils.LireGts;
 
@@ -174,20 +174,20 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 			if(estGts2){
 				ModelVolume vm = LireGts.lireFichier(fichier2);
 				JPanel pan = this.ms.getPan();
-				VueVolume vv = new VueVolume();
-				vv.setBounds(0, 0, 1024, 700);
-				vv.suppMouvementListener();
-				vv.suppMouseWheel();
-				vv.setVolumeModel(vm);
-				vv.addMouseMotionListener(MouvementVolume.getMouseController(vm));
-				vv.addMouseWheelListener(MouvementVolume.getMouseWheelController(vm));;
-				vv.setVisible(true);
-				vv.setBackground(Color.gray);
+				VueVolume vue = new VueVolume();
+				vue.setBounds(0, 0, 1024, 700);
+				vue.suppMouvementListener();
+				vue.suppMouseWheel();
+				vue.setVolumeModel(vm);
+				vue.addMouseMotionListener(DeplacerVolume.getMouseController(vm));
+				vue.addMouseWheelListener(DeplacerVolume.getMouseWheelController(vm));;
+				vue.setVisible(true);
+				vue.setBackground(Color.gray);
 				pan.setBounds(0, 30, 1024, 700);
 				pan.setLayout(null);
-				vv.revalidate();
+				vue.revalidate();
 				pan.removeAll();
-				pan.add(vv);
+				pan.add(vue);
 				pan.repaint();
 				this.ms.setPan(pan);
 				this.ms.add(this.ms.getPan());
@@ -198,6 +198,7 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 		}
 		//Si on clique sur le bouton ouvrir bdd
 		else if(arg0.getSource() == this.openBdd){
+			System.out.println("load bdd");
 			JPanel pan = this.ms.getPan();
 			pan.removeAll();
 			pan.setLayout(null);

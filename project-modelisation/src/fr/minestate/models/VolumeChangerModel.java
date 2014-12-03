@@ -3,7 +3,7 @@ package fr.minestate.models;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import fr.minestate.mouvement.MouvementVolume;
+import fr.minestate.modif.DeplacerVolume;
 
 /**
  * Permet de definir un SET de VolumeModel
@@ -68,7 +68,7 @@ public class VolumeChangerModel extends Observable {
 	 */
 	public void zoom(float factor) {
 		if(currentVolumeId >= 0)
-			volumes.get(currentVolumeId).zoom(factor);
+			volumes.get(currentVolumeId).z(factor);
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class VolumeChangerModel extends Observable {
 	public void addVolume(ModelVolume volume) {
 		this.volumes.add(volume);
 		setCurrentVolume(volumes.size() - 1);
-		MouvementVolume.optimalZoom(volume);
+	//	DeplacerVolume.optimalZoom(volume);
 		notifyObservers();
 	}
 

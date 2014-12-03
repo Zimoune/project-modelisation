@@ -64,7 +64,7 @@ public class LireGts {
 						listeSegments.get(Integer.parseInt(tri[1]) - 1), 
 						listeSegments.get(Integer.parseInt(tri[2]) - 1)));
 			}
-			volume.addAllFace(listeTriangles);
+			volume.ajoutFaces(listeTriangles);
 			fr.close();
 			buff.close();
 		} catch (FileNotFoundException e) {

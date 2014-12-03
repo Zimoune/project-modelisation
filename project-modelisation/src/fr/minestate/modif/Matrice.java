@@ -74,14 +74,14 @@ public class Matrice {
 		
 		for (int i = 0; i < tailleHaut(); i ++)
 			for (int j = 0; j < tailleLarge(); j++)
-				if (!closeEnough(retourneCase(i, j), matrice.retourneCase(i, j))) {
+				if (!close(retourneCase(i, j), matrice.retourneCase(i, j))) {
 					return false;
 				}			
 				
 		return true;
 	}
 	
-	private boolean closeEnough(float f1, float f2) {
+	private boolean close(float f1, float f2) {
 		return Math.abs(f1 - f2) < PRECISION;
 	}
 	
@@ -141,7 +141,7 @@ public class Matrice {
 		
 		for (int i = 0; i < tailleLarge(); i++) {
 			int j = i;
-			while (j < res.tailleHaut() && closeEnough(res.retourneCase(j, i), 0)) {
+			while (j < res.tailleHaut() && close(res.retourneCase(j, i), 0)) {
 				j++;
 			}
 			if (j == res.tailleHaut())
