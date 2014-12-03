@@ -11,7 +11,7 @@ import java.util.Set;
 
 import fr.minestate.figure.Face;
 import fr.minestate.modif.Homothetie;
-import fr.minestate.modif.Matrix;
+import fr.minestate.modif.Matrice;
 import fr.minestate.modif.Rotation;
 import fr.minestate.modif.Modification;
 import fr.minestate.modif.Translation;
@@ -22,7 +22,7 @@ import fr.minestate.utils.Point;
  * @author scta
  *
  */
-// ATTENTION : LA METHODE GETAFFINEFRAME N'EST PAS COMMENTEE
+
 public class ModelVolume extends Observable {
 	
 	private Set<Face> volume;
@@ -99,10 +99,10 @@ public class ModelVolume extends Observable {
 	 * Cette methode renvoie les triangles transformes
 	 * @return collection<triangle> 
 	 */
-	public Collection<Face> getPolygons() {
+	public Collection<Face> retourneListeTriangles() {
 		Collection<Face> originals = volume;
 		List<Face> out = new ArrayList<Face>();
-		Matrix transformation = translationX.add(translationY).prod(rotationX).prod(rotationY)
+		Matrice transformation = translationX.somme(translationY).prod(rotationX).prod(rotationY)
 				.prod(rotationZ).prod(zoom);	
 		for (Face t : originals) {
 			out.add(t.transform(transformation));
@@ -159,7 +159,7 @@ public class ModelVolume extends Observable {
 	 * @param axis l'axe selon lequel on veut effectuer la translation
 	 * @param norm
 	 */
-	public void translate(int axis, int norm) {
+	public void translation(int axis, int norm) {
 		if (axis == Translation.X_AXIS) {
 			((Translation) translationX).addNorm(norm);
 		} else if (axis == Translation.Y_AXIS) {
@@ -175,7 +175,7 @@ public class ModelVolume extends Observable {
 	 * @param axis l'axe selon lequel on veut effectuer la rotation
 	 * @param angle
 	 */
-	public void rotate(int axis, int angle) {
+	public void rotation(int axis, int angle) {
 		if (axis == Rotation.X_AXIS) {
 			((Rotation) rotationX).addAngle(angle);
 		} else if (axis == Rotation.Y_AXIS) {
@@ -201,7 +201,7 @@ public class ModelVolume extends Observable {
 	 * Permet de calculer le zoom optimal
 	 * @param d
 	 */
-	public void optimalZoom (Dimension d) {
+	public void zoom (Dimension d) {
 		float[] volumeDim = getMaxDimensions();
 		float minX = volumeDim[0];
 		float maxX = volumeDim[1];
@@ -250,7 +250,7 @@ public class ModelVolume extends Observable {
 		
 		// On itere sur tous les points pour
 		// recuperer les valeurs min et max
-		for (Face t : getPolygons()) {
+		for (Face t : retourneListeTriangles()) {
 			for (Point p : t.getCoords()) {
 				if (minX == null) {
 					minX = p.getX();
@@ -269,9 +269,6 @@ public class ModelVolume extends Observable {
 			}
 		}
 		
-		// on restaure les valeurs de zoom
-		// et translations (au cas ou la methode serait appellee 
-		// dans une situation autre que le zoom opti/centrage
 		((Homothetie) zoom).setfacteur(factor);
 		((Translation) translationX).setNorm(xNorm);
 		((Translation) translationY).setNorm(yNorm);
@@ -279,11 +276,11 @@ public class ModelVolume extends Observable {
 	}
 	
 	public Point[] getAffineFrame() {
-		Matrix m = rotationZ.prod(rotationY).prod(rotationX).prod(new Homothetie(20));
+		Matrice m = rotationZ.prod(rotationY).prod(rotationX).prod(new Homothetie(20));
 		Point[] out = new Point[3];
 		
 		for (int i = 0; i < 3; i++) {
-			out[i] = new Point(m.get(0, i), m.get(1, i), m.get(2, i));
+			out[i] = new Point(m.retourneCase(0, i), m.retourneCase(1, i), m.retourneCase(2, i));
 		}
 		
 		return out;
@@ -293,13 +290,13 @@ public class ModelVolume extends Observable {
 	 * Retourne la base
 	 * @return la base (matrix)
 	 */
-	private Matrix getBase() {
-		Matrix rotation = rotationZ.prod(rotationY).prod(rotationX);
-		Matrix out = new Matrix(3, 3);
+	private Matrice getBase() {
+		Matrice rotation = rotationZ.prod(rotationY).prod(rotationX);
+		Matrice out = new Matrice(3, 3);
 		
-		for (int i = 0; i < out.height(); i ++) {
-			for (int j = 0; j < out.width(); j++) {
-				out.set(i, j, rotation.get(i,j));
+		for (int i = 0; i < out.tailleHaut(); i ++) {
+			for (int j = 0; j < out.tailleLarge(); j++) {
+				out.set(i, j, rotation.retourneCase(i,j));
 			}
 		}
 		
@@ -310,17 +307,17 @@ public class ModelVolume extends Observable {
 	 * Permet d'executer une rotation selon une matrice
 	 * @param vector 
 	 */
-	public void rotate(Matrix vector) {
+	public void rotation(Matrice vector) {
 		//TODO : verif si vecteur et exception ?	
-		/*Matrix id = new Matrix(new float[][] {
+		/*Matrice id = new Matrice(new float[][] {
 				{1, 0, 0}, 
 				{0, 1, 0},
 				{0, 0, 1}});
 	   */
 		
-		Matrix vect = getBase().invert().prod(vector);
-		rotate(Rotation.Y_AXIS, (int) vect.get(0, 0));
-		rotate(Rotation.X_AXIS, (int) vect.get(1, 0));
+		Matrice vect = getBase().inversionMatrice().prod(vector);
+		rotation(Rotation.Y_AXIS, (int) vect.retourneCase(0, 0));
+		rotation(Rotation.X_AXIS, (int) vect.retourneCase(1, 0));
 	}
 
 	/**

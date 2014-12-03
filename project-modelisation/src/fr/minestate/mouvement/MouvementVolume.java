@@ -5,12 +5,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-
 import fr.minestate.models.ModelVolume;
-import fr.minestate.modif.Matrix;
+import fr.minestate.modif.Matrice;
 import fr.minestate.modif.Rotation;
 import fr.minestate.modif.Translation;
 
@@ -22,8 +20,8 @@ import fr.minestate.modif.Translation;
  */
 public class MouvementVolume {
 
-	public static int previousMouseX;
-	public static int previousMouseY;
+	public static int xSouris;
+	public static int ySouris;
 
 	private static JComponent panel;
 	@SuppressWarnings("unused")
@@ -32,56 +30,56 @@ public class MouvementVolume {
 	/**
 	 * Retourne le MouseMotionListener associe a un VolumeModel
 	 * 
-	 * @param m
+	 * @param vol
 	 *            le VolumeModel dont on veut recuperer le MouseMotionListener
 	 * @return son MouseMotionListener
 	 */
-	public static MouseMotionListener getMouseController(final ModelVolume m) {
+	public static MouseMotionListener getMouseController(final ModelVolume vol) {
 		return new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				if (SwingUtilities.isLeftMouseButton(e)) {
-					m.translate(Translation.X_AXIS, e.getX() - previousMouseX);
-					m.translate(Translation.Y_AXIS, e.getY() - previousMouseY);
+					vol.translation(Translation.X_AXIS, e.getX() - xSouris);
+					vol.translation(Translation.Y_AXIS, e.getY() - ySouris);
 				}
 
 				if (SwingUtilities.isRightMouseButton(e)) {
-					m.rotate(Rotation.Y_AXIS, e.getX() - previousMouseX);
-					m.rotate(Rotation.X_AXIS, previousMouseY - e.getY());
+					vol.rotation(Rotation.Y_AXIS, e.getX() - xSouris);
+					vol.rotation(Rotation.X_AXIS, ySouris - e.getY());
 				}
 
 				if (SwingUtilities.isMiddleMouseButton(e)) {
-					m.rotate(new Matrix(new float[][] {
-							{ e.getX() - previousMouseX },
-							{ previousMouseY - e.getY() }, { 0 } }));
+					vol.rotation(new Matrice(new float[][] {
+							{ e.getX() - xSouris },
+							{ ySouris - e.getY() }, { 0 } }));
 				}
 
-				previousMouseX = e.getX();
-				previousMouseY = e.getY();
+				xSouris = e.getX();
+				ySouris = e.getY();
 			}
 
 			/**
-			 * Permet d'effectuer les actions associees aux mouvements de la
+			 * Permet dimension'effectuer les actions associees aux mouvements de la
 			 * souris
 			 */
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				previousMouseX = e.getX();
-				previousMouseY = e.getY();
+				xSouris = e.getX();
+				ySouris = e.getY();
 			}
 		};
 	}
 
 	/**
 	 * Permet de renvoyer le MouseWheelListener associe a un VolumeModel
-	 * @param m le VolumeModel dont on veut connaitre le MouseWheelListener
+	 * @param vol le VolumeModel dont on veut connaitre le MouseWheelListener
 	 * @return son MouseWheelListener
 	 */
-	public static MouseWheelListener getMouseWheelController(final ModelVolume m) {
+	public static MouseWheelListener getMouseWheelController(final ModelVolume vol) {
 		return new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				m.zoom(e.getWheelRotation() * -5);
+				vol.zoom(e.getWheelRotation() * -5);
 			}
 		};
 	}
@@ -105,9 +103,9 @@ public class MouvementVolume {
 	/**
 	 * Permet de definir le meilleur zoom pour un VolumeModel selon des dimensions
 	 * @param model le VolumeModel dont on veut connaitre le meilleur zoom
-	 * @param d les dimensions
+	 * @param dimension les dimensions
 	 */
-	public static void optimalZoom(ModelVolume model, Dimension d) {
-		model.optimalZoom(d);
+	public static void optimalZoom(ModelVolume model, Dimension dimension) {
+		model.zoom(dimension);
 	}
 }

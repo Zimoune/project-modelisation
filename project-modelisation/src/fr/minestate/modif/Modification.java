@@ -5,7 +5,7 @@ package fr.minestate.modif;
  * @author scta
  *
  */
-public abstract class Modification extends Matrix {
+public abstract class Modification extends Matrice {
 
 	/**
 	 * Permet de definir une Transformation

@@ -61,9 +61,9 @@ public class VueVolume extends JPanel implements Observer {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);		
-		Collection<Face> triangles = volumeModel.getPolygons();
+		Collection<Face> triangles = volumeModel.retourneListeTriangles();
 		for (Face t : triangles) 
-			drawTriangle(t, g);
+			dessineTriangle(t, g);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class VueVolume extends JPanel implements Observer {
 	 * @param t le triangle a afficher
 	 * @param g permet d'afficher
 	 */
-	private void drawTriangle(Face t, Graphics g) {
+	private void dessineTriangle(Face t, Graphics g) {
 		Point[] points = t.getCoords();
 		Polygon p = new Polygon();
 		for (Point m : points) 
@@ -93,7 +93,7 @@ public class VueVolume extends JPanel implements Observer {
 	/**
 	 * Permet de supprimer les listeners associes a la roulette de la souris
 	 */
-	public void removeMouseWheelListener() {
+	public void suppMouseWheel() {
 		for(MouseWheelListener l : this.getMouseWheelListeners()) {
 			this.removeMouseWheelListener(l);
 		}
@@ -102,7 +102,7 @@ public class VueVolume extends JPanel implements Observer {
 	/**
 	 * Permet de supprimer les listeners associes aux mouvements de la souris
 	 */
-	public void removeMouseMotionListeners() {
+	public void suppMouvementListener() {
 		for(MouseMotionListener l : this.getMouseMotionListeners()) {
 			this.removeMouseMotionListener(l);
 		}

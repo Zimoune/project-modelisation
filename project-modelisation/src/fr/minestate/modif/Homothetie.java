@@ -47,7 +47,7 @@ public class Homothetie extends Modification {
 	 * Permet de mettre a jour la matrice d'homothetie selon le facteur
 	 */
 	protected void updateMatrix() {
-		this.matrix = new float [][] {
+		this.m = new float [][] {
 				{facteur, 0, 0, 0},
 				{0, facteur, 0, 0},
 				{0, 0, facteur, 0},

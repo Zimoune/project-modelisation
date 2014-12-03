@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import fr.minestate.modif.Matrix;
+import fr.minestate.modif.Matrice;
 import fr.minestate.figure.Segment;
 import fr.minestate.utils.Point;
 
@@ -75,7 +75,7 @@ public class Face implements Comparable<Face> {
 	}
 
 	/**
-	 * Permet de comparer deux triangles
+	 * Permet d'effectuer la comparaison pour l'algorithme du peintre
 	 */
 	@Override
 	public int compareTo(Face t) {
@@ -103,7 +103,7 @@ public class Face implements Comparable<Face> {
 	 *            : la matrice de transformation
 	 * @return le triangle transforme
 	 */
-	public Face transform(Matrix m) {
+	public Face transform(Matrice m) {
 		Point[] out = new Point[3];
 
 		for (int i = 0; i < out.length; i++) {

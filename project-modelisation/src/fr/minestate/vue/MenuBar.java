@@ -172,31 +172,22 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 					e1.printStackTrace();
 				}
 			if(estGts2){
-				ModelVolume vm = LireGts.getVolumeFromFile(fichier2);
+				ModelVolume vm = LireGts.lireFichier(fichier2);
 				JPanel pan = this.ms.getPan();
 				VueVolume vv = new VueVolume();
 				vv.setBounds(0, 0, 1024, 700);
-				// on enlève les anciens listeners (au cas ou l'utilisateur change d'avis)
-				vv.removeMouseMotionListeners();
-				vv.removeMouseWheelListener();
-				// on met à jour le modèle
+				vv.suppMouvementListener();
+				vv.suppMouseWheel();
 				vv.setVolumeModel(vm);
-				// on remet les bons listeners
 				vv.addMouseMotionListener(MouvementVolume.getMouseController(vm));
-				vv.addMouseWheelListener(MouvementVolume.getMouseWheelController(vm));
-				
-				//vv.setPreferredSize(new Dimension(1024, 700));
+				vv.addMouseWheelListener(MouvementVolume.getMouseWheelController(vm));;
 				vv.setVisible(true);
 				vv.setBackground(Color.gray);
 				pan.setBounds(0, 30, 1024, 700);
 				pan.setLayout(null);
 				vv.revalidate();
-				//On supprime les composants pour effacer l'ancien model
 				pan.removeAll();
-				//On ajoute le nouveau
 				pan.add(vv);
-				//this.ms.remove(this.ms.getPan());
-				//this.ms.remove(pan);
 				pan.repaint();
 				this.ms.setPan(pan);
 				this.ms.add(this.ms.getPan());

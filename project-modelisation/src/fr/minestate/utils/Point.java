@@ -2,7 +2,7 @@ package fr.minestate.utils;
 
 
 
-import fr.minestate.modif.Matrix;
+import fr.minestate.modif.Matrice;
 
 /**
  * Permet de creer un point
@@ -49,10 +49,10 @@ public class Point {
 	 * Construit un point selon  une matrice
 	 * @param m la matrice a partir de laquelle on veut faire le point
 	 */
-	public Point(Matrix m) {
-		x = m.get(0, 0);
-		y = m.get(1, 0);
-		z = m.get(2, 0);
+	public Point(Matrice m) {
+		x = m.retourneCase(0, 0);
+		y = m.retourneCase(1, 0);
+		z = m.retourneCase(2, 0);
 	}
 	
 
@@ -94,8 +94,8 @@ public class Point {
 	 * Permet d'avoir les coordonees du point sous forme Coordonnees Homogenes
 	 * @return une matrice correspondant aux coordonnees du point sous forme Homogene
 	 */
-	private Matrix getHomogenousVector() {
-		return new Matrix(new float[][] {{getX()},
+	private Matrice getHomogenousVector() {
+		return new Matrice(new float[][] {{getX()},
 										{getY()}, 
 										{getZ()},
 										{1f}});
@@ -106,7 +106,7 @@ public class Point {
 	 * @param transformation la matrice de transformation coordonnees homogenes
 	 * @return le point en coordonnees homogenes
 	 */
-	public Point transform(Matrix transformation) {
+	public Point transform(Matrice transformation) {
 		return new Point(transformation.prod(getHomogenousVector()));
 	}
 }

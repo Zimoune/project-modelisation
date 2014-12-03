@@ -47,9 +47,9 @@ public class VolumeChangerModel extends Observable {
 	 * @param axis l'axe selon lequel on veut translater
 	 * @param norm
 	 */
-	public void translate(int axis, int norm) {
+	public void translation(int axis, int norm) {
 		if(currentVolumeId >= 0)
-			volumes.get(currentVolumeId).translate(axis, norm);
+			volumes.get(currentVolumeId).translation(axis, norm);
 	}
 
 	/**
@@ -57,9 +57,9 @@ public class VolumeChangerModel extends Observable {
 	 * @param axis l'axe de la rotation
 	 * @param angle l'angle de la rotation
 	 */
-	public void rotate(int axis, int angle) {
+	public void rotation(int axis, int angle) {
 		if(currentVolumeId >= 0)
-			volumes.get(currentVolumeId).rotate(axis, angle);
+			volumes.get(currentVolumeId).rotation(axis, angle);
 	}
 
 	/**

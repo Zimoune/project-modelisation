@@ -22,8 +22,7 @@ import fr.minestate.vue.Fenetre;
 import fr.minestate.vue.VueVolume;
 
 /**
- * Permet de lister les objets de la bdd
- *  * @author scta
+ * Permet de lister les objets de la bdd * @author scta
  *
  */
 public class ListObjetPanel extends JPanel implements ActionListener {
@@ -34,11 +33,11 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 	private JButton valider = new JButton("Valider");
 	private JButton supprimer = new JButton("Supprimer");
 	private JLabel titre = new JLabel("Choisissez un model à charger");
-	private Fenetre ms;
+	private Fenetre fen;
 
-	public ListObjetPanel(Fenetre ms) {
+	public ListObjetPanel(Fenetre fen) {
 		this.setVisible(true);
-		this.ms = ms;
+		this.fen = fen;
 		this.setLayout(null);
 		this.setBounds(0, 0, 1024, 700);
 		this.setBackground(new Color(58, 146, 194));
@@ -63,16 +62,12 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Permet de creer une combo box avec tous les objets de la bdd
+	 * 
 	 * @return une JComboBox contenant tous les objets de la bdd
 	 */
 	private JComboBox<?> getComboBoxObjet() {
 		String[] list = new String[listObjet.size()];
 		System.out.println(listObjet.size());
-		/*
-		 * for(int i = 0; i<listObjet.size(); i++){ list[i] = listObjet.get(i);
-		 * }
-		 */
-
 		Set<String> set = listObjet.keySet();
 		Iterator<String> it = set.iterator();
 		int i = 0;
@@ -86,7 +81,8 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Permet de definir les actions quand on clique sur les boutons valider et supprimer
+	 * Permet de definir les actions quand on clique sur les boutons valider et
+	 * supprimer
 	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -106,22 +102,24 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			this.comboBox = this.getComboBoxObjet();
 			this.comboBox.revalidate();
 			JPanel pan = new JPanel();
-			pan = this.ms.getPan();
+			pan = this.fen.getPan();
 			pan.setBounds(0, 30, 1024, 700);
 			pan.setLayout(null);
 			pan.removeAll();
-			pan.add(new ListObjetPanel(this.ms));
+			pan.add(new ListObjetPanel(this.fen));
 			pan.repaint();
-			this.ms.setPan(pan);
-			this.ms.add(this.ms.getPan());
-			this.ms.getPan().repaint();
-			this.ms.revalidate();
+			this.fen.setPan(pan);
+			this.fen.add(this.fen.getPan());
+			this.fen.getPan().repaint();
+			this.fen.revalidate();
 		}
 	}
 
 	/**
 	 * Permet de charger un fichier
-	 * @param lien le lien du fichier
+	 * 
+	 * @param lien
+	 *            le lien du fichier
 	 */
 	private void loadFile(String lien) {
 		boolean estGts2 = false;
@@ -138,40 +136,28 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		if (estGts2) {
-			ModelVolume vm = LireGts.getVolumeFromFile(fichier2);
+			ModelVolume vm = LireGts.lireFichier(fichier2);
 
-			JPanel pan = this.ms.getPan();
-			VueVolume vv = new VueVolume();
-			vv.setBounds(0, 0, 1024, 700);
-			// on enlève les anciens listeners (au cas ou l'utilisateur change
-			// d'avis)
-			vv.removeMouseMotionListeners();
-			vv.removeMouseWheelListener();
-			// on met à jour le modèle
-			vv.setVolumeModel(vm);
-			// on remet les bons listeners
-			vv.addMouseMotionListener(MouvementVolume.getMouseController(vm));
-			vv.addMouseWheelListener(MouvementVolume
+			JPanel pan = this.fen.getPan();
+			VueVolume vue = new VueVolume();
+			vue.setBounds(0, 0, 1024, 700);
+			vue.suppMouvementListener();
+			vue.suppMouseWheel();
+			vue.setVolumeModel(vm);
+			vue.addMouseMotionListener(MouvementVolume.getMouseController(vm));
+			vue.addMouseWheelListener(MouvementVolume
 					.getMouseWheelController(vm));
-
-			// vv.setPreferredSize(new Dimension(1024, 700));
-			vv.setVisible(true);
-			vv.setBackground(Color.gray);
-
+			vue.setVisible(true);
+			vue.setBackground(Color.gray);
 			pan.setBounds(0, 30, 1024, 700);
 			pan.setLayout(null);
-			vv.revalidate();
-			// On supprime les composants pour effacer l'ancien model
+			vue.revalidate();
 			pan.removeAll();
-			// On ajoute le nouveau
-			pan.add(vv);
-			// this.ms.remove(this.ms.getPan());
-			// this.ms.remove(pan);
 			pan.repaint();
-			this.ms.setPan(pan);
-			this.ms.add(this.ms.getPan());
-			this.ms.getPan().repaint();
-			this.ms.revalidate();
+			this.fen.setPan(pan);
+			this.fen.add(this.fen.getPan());
+			this.fen.getPan().repaint();
+			this.fen.revalidate();
 		}
 	}
 
