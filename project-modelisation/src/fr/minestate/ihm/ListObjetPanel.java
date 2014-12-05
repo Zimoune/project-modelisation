@@ -44,12 +44,12 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 		this.setBounds(0, 0, 1024, 700);
 		this.setBackground(new Color(58, 146, 194));
 		this.valider.addActionListener(this);
-		this.valider.setBounds(0, 350, 180, 25);
+		this.valider.setBounds(350, 350, 180, 25);
 		this.valider.setVisible(true);
 		this.supprimer.addActionListener(this);
-		this.supprimer.setBounds(200, 350, 180, 25);
+		this.supprimer.setBounds(550, 350, 180, 25);
 		this.supprimer.setVisible(true);
-		this.titre.setBounds(0, 0, 300, 20);
+		this.titre.setBounds(350, 50, 300, 20);
 		Connexion con = new Connexion();
 		this.listObjet = con.getListObjet();
 		con.closeConnexion();
@@ -78,7 +78,7 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			i++;
 		}
 		JComboBox<?> objetList = new JComboBox<Object>(list);
-		objetList.setBounds(0, 80, 300, 20);
+		objetList.setBounds(350, 80, 300, 20);
 		return objetList;
 	}
 
