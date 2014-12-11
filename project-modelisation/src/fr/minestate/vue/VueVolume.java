@@ -27,6 +27,16 @@ public class VueVolume extends JPanel implements Observer {
 	
 	private ModelVolume modelVolume;
 	
+	public boolean isFdf() {
+		return fdf;
+	}
+
+	public void setFdf(boolean fdf) {
+		this.fdf = fdf;
+	}
+
+	private boolean fdf;
+	
 	/**
 	 * Permet d'initialser un VolumeView sans parametre
 	 */
@@ -62,8 +72,12 @@ public class VueVolume extends JPanel implements Observer {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);		
 		Collection<Face> triangles = modelVolume.retourneListeTriangles();
-		for (Face t : triangles) 
-			dessineTriangle(t, g);
+		if(fdf)
+			for (Face t : triangles) 
+				dessineTriangleFilDeFer(t, g);
+		else
+			for (Face t : triangles) 
+				dessineTriangle(t, g);
 	}
 	
 	/**
@@ -78,6 +92,16 @@ public class VueVolume extends JPanel implements Observer {
 			p.addPoint((int) (m.getX()),(int)m.getY());
 		g.setColor(Color.red);
 		g.fillPolygon(p);
+		g.setColor(Color.black);
+		g.drawPolygon(p);
+	}
+	
+	private void dessineTriangleFilDeFer(Face t, Graphics g){
+		Point[] points = t.getCoords();
+		Polygon p = new Polygon();
+		for (Point m : points) 
+			p.addPoint((int) (m.getX()),(int)m.getY());
+		g.setColor(Color.red);
 		g.setColor(Color.black);
 		g.drawPolygon(p);
 	}

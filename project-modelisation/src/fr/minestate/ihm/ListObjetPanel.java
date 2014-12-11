@@ -21,6 +21,7 @@ import fr.minestate.modif.Rotation;
 import fr.minestate.modif.Translation;
 import fr.minestate.utils.LireGts;
 import fr.minestate.vue.Fenetre;
+import fr.minestate.vue.MenuBarre;
 import fr.minestate.vue.VueVolume;
 
 /**
@@ -36,6 +37,7 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 	private JButton supprimer = new JButton("Supprimer");
 	private JLabel titre = new JLabel("Choisissez un model à charger");
 	private Fenetre fen;
+	private ModelVolume mv = null;
 
 	public ListObjetPanel(Fenetre fen) {
 		this.setVisible(true);
@@ -138,36 +140,27 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		if (estGts2) {
-			ModelVolume vm = LireGts.lireFichier(fichier2);
-			vm.setRotation(Rotation.X_AXIS, 180);
-			vm.setTranslation(Translation.X_AXIS, 1024 / 2);
-			vm.setTranslation(Translation.Y_AXIS, 700 / 2);
-			
-			vm.z(42);
-
+			this.mv = LireGts.lireFichier(fichier2);
+			this.mv.initVolume();
 			JPanel pan = this.fen.getPan();
-			VueVolume vue = new VueVolume();
-			vue.setBounds(0, 0, 1024, 700);
-			vue.suppMouvementListener();
-			vue.suppMouseWheel();
-			vue.setVolumeModel(vm);
-			vue.addMouseMotionListener(DeplacerVolume.getMouseController(vm));
-			vue.addMouseWheelListener(DeplacerVolume
-					.getMouseWheelController(vm));
-			vue.setVisible(true);
-			vue.setBackground(Color.gray);
-			pan.setBounds(0, 30, 1024, 700);
-			pan.setLayout(null);
-			vue.revalidate();
+			MenuBarre me = this.fen.getmenuBarre();
 			pan.removeAll();
-			pan.add(vue);
+			pan.add(me.getVue());
 			pan.repaint();
+			me.setMv(mv);
 			this.fen.setPan(pan);
 			this.fen.add(this.fen.getPan());
 			this.fen.getPan().repaint();
 			this.fen.revalidate();
-
 		}
+	}
+
+	public ModelVolume getMv() {
+		return mv;
+	}
+
+	public void setMv(ModelVolume mv) {
+		this.mv = mv;
 	}
 
 }

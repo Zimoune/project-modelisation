@@ -76,7 +76,7 @@ public class ModelVolume extends Observable {
 	/**
 	 * Permet d'initialiser un volume, en effectuant les reglages necessaires
 	 */
-	private void initVolume() {
+	public void initVolume() {
 		rotX = new Rotation(Rotation.X_AXIS, 0);
 		rotY = new Rotation(Rotation.Y_AXIS, 0);
 		rotZ = new Rotation(Rotation.Z_AXIS, 0);

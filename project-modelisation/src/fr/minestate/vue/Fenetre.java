@@ -24,7 +24,16 @@ public class Fenetre extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
 	private VolumeChangerModel volumeChangerModel;
-	private MenuBar menuBar;
+	private MenuBarre menuBarre;
+
+	public MenuBarre getmenuBarre() {
+		return menuBarre;
+	}
+
+	public void setmenuBarre(MenuBarre menuBarre) {
+		this.menuBarre = menuBarre;
+	}
+
 	private JPanel panel = new JPanel();
 	
 	/**
@@ -43,18 +52,17 @@ public class Fenetre extends JFrame {
 		this.setTitle("Modélisation");
 		this.setPreferredSize(new Dimension(1024, 728));
 		this.volumeChangerModel = new VolumeChangerModel();
-		this.menuBar = new MenuBar(volumeChangerModel, this);
-		menuBar.setBounds(0, 0, 1024, 30);
+		this.menuBarre = new MenuBarre(volumeChangerModel, this);
+		menuBarre.setBounds(0, 0, 1024, 30);
 		this.mainPanel = new JPanel();
 		this.setBounds(0, 30, 1024, 700);
 		this.panel.setLayout(null);
 		this.getContentPane().setBackground(Color.LIGHT_GRAY);
 		this.add(mainPanel);
-		this.add(menuBar);
+		this.add(menuBarre);
 
 		
 		boolean estGts2 = false;
-		System.out.println("Ahhhh ! " + chemin1erObjet);
 		File fichier2 = new File(chemin1erObjet);
 		String extension2 = fichier2.getName().substring(
 				fichier2.getName().length() - 4, fichier2.getName().length());
@@ -79,6 +87,7 @@ public class Fenetre extends JFrame {
 					.getMouseWheelController(vm));
 			vue.setVisible(true);
 			vue.setBackground(Color.gray);
+			this.menuBarre.setVue(vue);
 			panel.setBounds(0, 30, 1024, 700);
 			panel.setLayout(null);
 			vue.revalidate();
