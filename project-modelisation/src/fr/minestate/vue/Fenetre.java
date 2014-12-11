@@ -16,7 +16,9 @@ import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.LireGts;
 
 /**
- * Permet de definir la fenetre principale d'affichage. On définit la figure à afficher des le lancement par un cube.
+ * Permet de definir la fenetre principale d'affichage. On définit la figure à
+ * afficher des le lancement par un cube.
+ * 
  * @author scta
  */
 public class Fenetre extends JFrame {
@@ -24,7 +26,8 @@ public class Fenetre extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
 	private VolumeChangerModel volumeChangerModel;
-	private MenuBarre menuBarre;
+	public MenuBarre menuBarre;
+	ModelVolume vm;
 
 	public MenuBarre getmenuBarre() {
 		return menuBarre;
@@ -35,7 +38,7 @@ public class Fenetre extends JFrame {
 	}
 
 	private JPanel panel = new JPanel();
-	
+
 	/**
 	 * Permet d'initialiser la fenetre avec un cube préchargé
 	 */
@@ -43,8 +46,8 @@ public class Fenetre extends JFrame {
 		Connexion con = new Connexion();
 		Map<String, String> listObjet = con.getListObjet();
 		System.out.println("Taille listObjet = " + listObjet.size());
-		String chemin1erObjet = listObjet.get("cube");
-		
+		String chemin1erObjet = listObjet.get("bunny");
+
 		this.setLayout(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
@@ -52,7 +55,7 @@ public class Fenetre extends JFrame {
 		this.setTitle("Modélisation");
 		this.setPreferredSize(new Dimension(1024, 728));
 		this.volumeChangerModel = new VolumeChangerModel();
-		this.menuBarre = new MenuBarre(volumeChangerModel, this);
+		this.menuBarre = new MenuBarre(volumeChangerModel, this, true);
 		menuBarre.setBounds(0, 0, 1024, 30);
 		this.mainPanel = new JPanel();
 		this.setBounds(0, 30, 1024, 700);
@@ -61,62 +64,79 @@ public class Fenetre extends JFrame {
 		this.add(mainPanel);
 		this.add(menuBarre);
 
-		
 		boolean estGts2 = false;
-		File fichier2 = new File(chemin1erObjet);
-		String extension2 = fichier2.getName().substring(
-				fichier2.getName().length() - 4, fichier2.getName().length());
-		if (extension2.equals(".gts")) {
-			estGts2 = true;
-		} else
-			try {
-				throw new FichierException("Format de fichier incorrect.");
-			} catch (FichierException e1) {
-				e1.printStackTrace();
+
+		if (!listObjet.isEmpty()) {
+
+			File fichier2 = new File(chemin1erObjet);
+			String extension2 = fichier2.getName().substring(
+					fichier2.getName().length() - 4,
+					fichier2.getName().length());
+			if (extension2.equals(".gts")) {
+				estGts2 = true;
+			} else
+				try {
+					throw new FichierException("Format de fichier incorrect.");
+				} catch (FichierException e1) {
+					e1.printStackTrace();
+				}
+			if (estGts2) {
+				vm = LireGts.lireFichier(fichier2);
+				JPanel panel = this.getPan();
+				VueVolume vue = new VueVolume();
+				vue.setBounds(0, 0, 1024, 700);
+				vue.suppMouvementListener();
+				vue.suppMouseWheel();
+				vue.setVolumeModel(vm);
+				vue.addMouseMotionListener(DeplacerVolume
+						.getMouseController(vm));
+				vue.addMouseWheelListener(DeplacerVolume
+						.getMouseWheelController(vm));
+				vue.setVisible(true);
+				vue.setBackground(Color.gray);
+				this.menuBarre.setVue(vue);
+				panel.setBounds(0, 30, 1024, 700);
+				panel.setLayout(null);
+				vue.revalidate();
+				panel.removeAll();
+				panel.add(vue);
+				panel.repaint();
+				this.setPan(panel);
+				this.getPan().repaint();
+				this.revalidate();
+
+				this.add(panel);
+				this.pack();
 			}
-		if (estGts2) {
-			ModelVolume vm = LireGts.lireFichier(fichier2);
-			JPanel panel = this.getPan();
-			VueVolume vue = new VueVolume();
-			vue.setBounds(0, 0, 1024, 700);
-			vue.suppMouvementListener();
-			vue.suppMouseWheel();
-			vue.setVolumeModel(vm);
-			vue.addMouseMotionListener(DeplacerVolume.getMouseController(vm));
-			vue.addMouseWheelListener(DeplacerVolume
-					.getMouseWheelController(vm));
-			vue.setVisible(true);
-			vue.setBackground(Color.gray);
-			this.menuBarre.setVue(vue);
-			panel.setBounds(0, 30, 1024, 700);
-			panel.setLayout(null);
-			vue.revalidate();
-			panel.removeAll();
-			panel.add(vue);
-			panel.repaint();
-			this.setPan(panel);
-			this.getPan().repaint();
-			this.revalidate();
-		
-		
-		this.add(panel);
-		this.pack();
 		}
+		
+		else {
+
+			//this.menuBarre.initGUI();
+			//this.revalidate();
+			this.add(panel);
+			this.pack();
+		}
+		
+		
 	}
 
 	/**
 	 * Retourne le panel de la fenetre
+	 * 
 	 * @return le panel de la fenetre
 	 */
 	public JPanel getPan() {
 		return this.panel;
 	}
-	
+
 	/**
 	 * Permet de changer le panel de la fenetre
-	 * @param panel le nouveau panel
+	 * 
+	 * @param panel
+	 *            le nouveau panel
 	 */
-	public void setPan(JPanel panel){
+	public void setPan(JPanel panel) {
 		this.panel = panel;
 	}
 }

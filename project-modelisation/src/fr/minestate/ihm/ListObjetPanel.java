@@ -16,9 +16,8 @@ import javax.swing.JPanel;
 import fr.minestate.bdd.Connexion;
 import fr.minestate.exception.FichierException;
 import fr.minestate.models.ModelVolume;
+import fr.minestate.models.VolumeChangerModel;
 import fr.minestate.modif.DeplacerVolume;
-import fr.minestate.modif.Rotation;
-import fr.minestate.modif.Translation;
 import fr.minestate.utils.LireGts;
 import fr.minestate.vue.Fenetre;
 import fr.minestate.vue.MenuBarre;
@@ -37,31 +36,37 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 	private JButton supprimer = new JButton("Supprimer");
 	private JLabel titre = new JLabel("Choisissez un model à charger");
 	private Fenetre fen;
-	private ModelVolume mv = null;
+	public boolean estValide = false;
+	public ModelVolume vm = null;
+	VolumeChangerModel vsm = null;
+	MenuBarre mb = new MenuBarre(vsm, fen, false);
 
 	public ListObjetPanel(Fenetre fen) {
-		this.setVisible(true);
-		this.fen = fen;
-		this.setLayout(null);
-		this.setBounds(0, 0, 1024, 700);
-		this.setBackground(new Color(58, 146, 194));
-		this.valider.addActionListener(this);
-		this.valider.setBounds(350, 350, 180, 25);
-		this.valider.setVisible(true);
-		this.supprimer.addActionListener(this);
-		this.supprimer.setBounds(550, 350, 180, 25);
-		this.supprimer.setVisible(true);
-		this.titre.setBounds(350, 50, 300, 20);
-		Connexion con = new Connexion();
-		this.listObjet = con.getListObjet();
-		con.closeConnexion();
-		this.comboBox = this.getComboBoxObjet();
-		this.comboBox.setVisible(true);
-		this.add(titre);
-		this.add(supprimer);
-		this.add(valider);
-		this.add(comboBox);
-		this.revalidate();
+			this.setVisible(true);
+			this.fen = fen;
+			this.setLayout(null);
+			this.setBounds(0, 0, 1024, 700);
+			this.setBackground(new Color(58, 146, 194));
+			this.valider.addActionListener(this);
+			this.valider.setBounds(350, 350, 180, 25);
+			this.valider.setVisible(true);
+			this.supprimer.addActionListener(this);
+			this.supprimer.setBounds(550, 350, 180, 25);
+			this.supprimer.setVisible(true);
+			this.titre.setBounds(350, 50, 300, 20);
+			Connexion con = new Connexion();
+			this.listObjet = con.getListObjet();
+			con.closeConnexion();
+			this.comboBox = this.getComboBoxObjet();
+			this.comboBox.setVisible(true);
+			this.add(titre);
+			this.add(supprimer);
+			this.add(valider);
+			this.add(comboBox);
+			this.revalidate();
+		
+	
+		
 	}
 
 	/**
@@ -91,11 +96,14 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == valider) {
+			estValide = true;
 			Connexion con = new Connexion();
 			String chemin = con.getCheminObjet(this.comboBox.getSelectedItem()
 					.toString());
-			System.out.println("Chemin " + chemin);
-			this.loadFile(chemin);
+			this.vm = this.loadFile(chemin);
+			this.setVm(vm);
+			
+			System.out.println("LOP : this.vm = " + this.vm.toString());
 			con.closeConnexion();
 			this.revalidate();
 		}
@@ -126,7 +134,7 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 	 * @param lien
 	 *            le lien du fichier
 	 */
-	private void loadFile(String lien) {
+	private ModelVolume loadFile(String lien) {
 		boolean estGts2 = false;
 		File fichier2 = new File(lien);
 		String extension2 = fichier2.getName().substring(
@@ -140,6 +148,7 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		if (estGts2) {
+			/*
 			this.mv = LireGts.lireFichier(fichier2);
 			this.mv.initVolume();
 			JPanel pan = this.fen.getPan();
@@ -152,15 +161,50 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			this.fen.add(this.fen.getPan());
 			this.fen.getPan().repaint();
 			this.fen.revalidate();
+			*/
+			
+			this.vm = LireGts.lireFichier(fichier2);
+			this.vm.initVolume();
+			JPanel pan = this.fen.getPan();
+			
+			VueVolume vue = new VueVolume();
+			vue.setBounds(0, 0, 1024, 700);
+			vue.suppMouvementListener();
+			vue.suppMouseWheel();
+			vue.setVolumeModel(vm);
+			vue.addMouseMotionListener(DeplacerVolume.getMouseController(vm));
+			vue.addMouseWheelListener(DeplacerVolume
+					.getMouseWheelController(vm));
+			vue.setVisible(true);
+			vue.setBackground(Color.gray);
+			pan.setBounds(0, 30, 1024, 700);
+			pan.setLayout(null);
+			vue.revalidate();
+			pan.removeAll();
+			pan.add(vue);
+			pan.repaint();
+			this.fen.setPan(pan);
+			this.fen.add(this.fen.getPan());
+			this.fen.getPan().repaint();
+			this.fen.revalidate();
 		}
+		
+		System.out.println("laod file mv = " + this.vm.toString());
+		return this.vm;
 	}
 
-	public ModelVolume getMv() {
-		return mv;
+
+
+	public ModelVolume getVm() {
+		return vm;
+	}
+
+	public void setVm(ModelVolume vm) {
+		this.vm = vm;
 	}
 
 	public void setMv(ModelVolume mv) {
-		this.mv = mv;
+		this.vm = mv;
 	}
 
 }
