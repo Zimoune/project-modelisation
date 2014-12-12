@@ -27,6 +27,7 @@ public class Fenetre extends JFrame {
 	private JPanel mainPanel;
 	private VolumeChangerModel volumeChangerModel;
 	public MenuBarre menuBarre;
+	private SearchBar searchBar = new SearchBar();
 	ModelVolume vm;
 
 	public MenuBarre getmenuBarre() {
@@ -46,7 +47,7 @@ public class Fenetre extends JFrame {
 		Connexion con = new Connexion();
 		Map<String, String> listObjet = con.getListObjet();
 		System.out.println("Taille listObjet = " + listObjet.size());
-		String chemin1erObjet = listObjet.get("bunny");
+		String chemin1erObjet = listObjet.get("cube");
 
 		this.setLayout(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -63,7 +64,7 @@ public class Fenetre extends JFrame {
 		this.getContentPane().setBackground(Color.LIGHT_GRAY);
 		this.add(mainPanel);
 		this.add(menuBarre);
-
+		this.add(searchBar);
 		boolean estGts2 = false;
 
 		if (!listObjet.isEmpty()) {
@@ -95,7 +96,7 @@ public class Fenetre extends JFrame {
 				vue.setVisible(true);
 				vue.setBackground(Color.gray);
 				this.menuBarre.setVue(vue);
-				panel.setBounds(0, 30, 1024, 700);
+				panel.setBounds(160, 30, 1024-160, 700);
 				panel.setLayout(null);
 				vue.revalidate();
 				panel.removeAll();

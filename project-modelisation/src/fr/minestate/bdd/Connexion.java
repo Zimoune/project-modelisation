@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -106,6 +107,20 @@ public class Connexion {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Map<String, String> getObjectsByLike(String word){
+		Map<String, String> mapObjet = new HashMap<String, String>();
+		ResultSet rs = this.getExecuteStatement("SELECT nom, lien FROM objets WHERE nom LIKE '%"+word+"%'");
+		try {
+			while(rs.next()){
+				mapObjet.put(rs.getString("nom"), rs.getString("lien"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return mapObjet;
 	}
 	
 	/**
