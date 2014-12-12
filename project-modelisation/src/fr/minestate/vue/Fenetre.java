@@ -1,5 +1,6 @@
 package fr.minestate.vue;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
@@ -27,7 +28,7 @@ public class Fenetre extends JFrame {
 	private JPanel mainPanel;
 	private VolumeChangerModel volumeChangerModel;
 	public MenuBarre menuBarre;
-	private SearchBar searchBar = new SearchBar();
+	private SearchBar searchBar = new SearchBar(this);
 	ModelVolume vm;
 
 	public MenuBarre getmenuBarre() {
@@ -49,7 +50,7 @@ public class Fenetre extends JFrame {
 		System.out.println("Taille listObjet = " + listObjet.size());
 		String chemin1erObjet = listObjet.get("cube");
 
-		this.setLayout(null);
+		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
@@ -57,14 +58,12 @@ public class Fenetre extends JFrame {
 		this.setPreferredSize(new Dimension(1024, 728));
 		this.volumeChangerModel = new VolumeChangerModel();
 		this.menuBarre = new MenuBarre(volumeChangerModel, this, true);
-		menuBarre.setBounds(0, 0, 1024, 30);
 		this.mainPanel = new JPanel();
-		this.setBounds(0, 30, 1024, 700);
 		this.panel.setLayout(null);
 		this.getContentPane().setBackground(Color.LIGHT_GRAY);
-		this.add(mainPanel);
-		this.add(menuBarre);
-		this.add(searchBar);
+		this.add(mainPanel, BorderLayout.CENTER);
+		this.add(menuBarre, BorderLayout.NORTH);
+		this.add(searchBar, BorderLayout.WEST);
 		boolean estGts2 = false;
 
 		if (!listObjet.isEmpty()) {
@@ -96,7 +95,7 @@ public class Fenetre extends JFrame {
 				vue.setVisible(true);
 				vue.setBackground(Color.gray);
 				this.menuBarre.setVue(vue);
-				panel.setBounds(160, 30, 1024-160, 700);
+
 				panel.setLayout(null);
 				vue.revalidate();
 				panel.removeAll();
@@ -106,7 +105,7 @@ public class Fenetre extends JFrame {
 				this.getPan().repaint();
 				this.revalidate();
 
-				this.add(panel);
+				this.add(panel, BorderLayout.CENTER);
 				this.pack();
 			}
 		}
@@ -115,7 +114,7 @@ public class Fenetre extends JFrame {
 
 			//this.menuBarre.initGUI();
 			//this.revalidate();
-			this.add(panel);
+			this.add(panel, BorderLayout.CENTER);
 			this.pack();
 		}
 		
