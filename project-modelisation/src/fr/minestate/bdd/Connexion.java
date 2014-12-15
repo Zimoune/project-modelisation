@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -163,7 +162,7 @@ public class Connexion {
 	}
 	
 	/**
-	 * Permet de supprimer un objet dans la bdd
+	 * Permet de supprimer un BoxLayout.PAGE_AXISobjet dans la bdd
 	 * @param objet : l'objet a supprimer
 	 */
 	public void supprimerObjet(String objet){
@@ -175,6 +174,21 @@ public class Connexion {
 		else{
 			System.out.println("Suppression ok");
 		}
+	}
+	
+	public Map<String, String> getInfo(String nom){
+		Map<String, String> mapObjet = new HashMap<String, String>();
+		ResultSet rs = this.getExecuteStatement("SELECT nom, lien FROM objets WHERE nom = '"+nom+"';");
+		try {
+			while(rs.next()){
+				mapObjet.put(rs.getString("lien"), rs.getString("lien"));
+				mapObjet.put(rs.getString("nom"), rs.getString("nom"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return mapObjet;
 	}
 
 }

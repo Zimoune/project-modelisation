@@ -9,7 +9,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import fr.minestate.models.ModelVolume;
+import fr.minestate.bordel.ModelVolume;
 import fr.minestate.utils.Point;
 
 /**

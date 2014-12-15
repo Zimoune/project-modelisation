@@ -14,14 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import fr.minestate.bdd.Connexion;
+import fr.minestate.bordel.Fenetre;
+import fr.minestate.bordel.MenuBarre;
+import fr.minestate.bordel.ModelVolume;
+import fr.minestate.bordel.VolumeChangerModel;
+import fr.minestate.bordel.VueVolume;
 import fr.minestate.exception.FichierException;
-import fr.minestate.models.ModelVolume;
-import fr.minestate.models.VolumeChangerModel;
 import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.LireGts;
-import fr.minestate.vue.Fenetre;
-import fr.minestate.vue.MenuBarre;
-import fr.minestate.vue.VueVolume;
 
 /**
  * Permet de lister les objets de la bdd * @author scta

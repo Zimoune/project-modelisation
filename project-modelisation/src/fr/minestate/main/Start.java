@@ -1,6 +1,6 @@
 package fr.minestate.main;
 
-import fr.minestate.vue.Fenetre;
+import fr.minestate.bordel.Fenetre;
 
 /**
  * Classe principale, permettant de demarrer le programme
