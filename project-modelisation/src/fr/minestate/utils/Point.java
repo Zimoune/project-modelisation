@@ -2,6 +2,7 @@ package fr.minestate.utils;
 
 
 
+import fr.minestate.exception.IncompatibleSizeException;
 import fr.minestate.modif.Matrice;
 
 /**
@@ -105,8 +106,9 @@ public class Point {
 	 * Permet de transformer un point en ses coordonnees homogenes
 	 * @param transformation la matrice de transformation coordonnees homogenes
 	 * @return le point en coordonnees homogenes
+	 * @throws IncompatibleSizeException 
 	 */
-	public Point transform(Matrice transformation) {
-		return new Point(transformation.prod(getHomogenousVector()));
+	public Point transform(Matrice transformation) throws IncompatibleSizeException {
+		return new Point(transformation.multiply(getHomogenousVector()));
 	}
 }

@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import fr.minestate.exception.IncompatibleSizeException;
 import fr.minestate.modif.Matrice;
-import fr.minestate.figure.Segment;
 import fr.minestate.utils.Point;
 
 /**
@@ -102,8 +103,9 @@ public class Face implements Comparable<Face> {
 	 * @param m
 	 *            : la matrice de transformation
 	 * @return le triangle transforme
+	 * @throws IncompatibleSizeException 
 	 */
-	public Face transform(Matrice m) {
+	public Face transform(Matrice m) throws IncompatibleSizeException {
 		Point[] out = new Point[3];
 
 		for (int i = 0; i < out.length; i++) {

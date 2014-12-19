@@ -10,6 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import fr.minestate.bordel.ModelVolume;
+import fr.minestate.exception.IncompatibleSizeException;
 import fr.minestate.utils.Point;
 
 /**
@@ -71,9 +72,17 @@ public class DeplacerVolume {
 				}
 
 				if (SwingUtilities.isMiddleMouseButton(e)) {
-					vol.rotation(new Matrice(new float[][] {
-							{ e.getX() - xSouris },
-							{ ySouris - e.getY() }, { 0 } }));
+					try {
+						vol.rotation(new Matrice(new float[][] {
+								{ e.getX() - xSouris },
+								{ ySouris - e.getY() }, { 0 } }));
+					} catch (IncompatibleSizeException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 
 				xSouris = e.getX();

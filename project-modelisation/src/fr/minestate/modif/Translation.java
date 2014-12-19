@@ -63,7 +63,7 @@ public class Translation extends Modification {
 		}
 		
 		
-		this.m = new float[][] {
+		this.elem = new float[][] {
 									{1f, 0, 0, x},
 									{0, 1, 0, y},
 									{0, 0, 1, 0},

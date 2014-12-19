@@ -56,19 +56,19 @@ public class Rotation extends Modification {
 	protected void updateMatrix() {
 		float rad = (float) Math.toRadians(angle);
 		if (axis == X_AXIS) {
-			this.m = new float [][] {
+			this.elem = new float [][] {
 					{1f, 0, 0, 0},
 					{0, (float) Math.cos(rad), (float) (-1 * Math.sin(rad)), 0},
 					{0, (float) Math.sin(rad), (float) Math.cos(rad), 0},
 					{0, 0, 0, 1}};
 		} else if (axis == Y_AXIS) {
-			this.m = new float [][] {
+			this.elem = new float [][] {
 					{(float) Math.cos(rad), 0, (float) Math.sin(rad), 0},
 					{0 ,1 ,0 , 0},
 					{-1 * (float) Math.sin(rad), 0, (float) Math.cos(rad), 0},
 					{0, 0, 0, 1}};
 		} else {
-			this.m = new float [][] {
+			this.elem = new float [][] {
 					{(float) Math.cos(rad), -1 * (float) Math.sin(rad), 0, 0},
 					{(float) Math.sin(rad), (float) Math.cos(rad), 0 , 0},
 					{0, 0, 1, 0},

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Set;
 
+import fr.minestate.exception.IncompatibleSizeException;
 import fr.minestate.figure.Face;
 import fr.minestate.modif.Homothetie;
 import fr.minestate.modif.Matrice;
@@ -113,12 +114,19 @@ public class ModelVolume extends Observable {
 	 * Cette methode renvoie les triangles transformes
 	 * 
 	 * @return collection<triangle>
+	 * @throws IncompatibleSizeException 
 	 */
-	public Collection<Face> retourneListeTriangles() {
+	public Collection<Face> retourneListeTriangles() throws IncompatibleSizeException {
 		Collection<Face> originals = volume;
 		List<Face> res = new ArrayList<Face>();
-		Matrice transformation = trX.somme(trY)
-				.prod(rotX).prod(rotY).prod(rotZ).prod(z);
+		Matrice transformation = null;
+		try {
+			transformation = trX.add(trY)
+					.multiply(rotX).multiply(rotY).multiply(rotZ).multiply(z);
+		} catch (IncompatibleSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for (Face face : originals) {
 			res.add(face.transform(transformation));
 		}
@@ -231,7 +239,13 @@ public class ModelVolume extends Observable {
 	 * @param d
 	 */
 	public void z(Dimension d) {
-		float[] volumeDim = getMaxDimensions();
+		float[] volumeDim = null;
+		try {
+			volumeDim = getMaxDimensions();
+		} catch (IncompatibleSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		float mix = volumeDim[0];
 		float max = volumeDim[1];
 		float miy = volumeDim[2];
@@ -253,8 +267,9 @@ public class ModelVolume extends Observable {
 	 * Permet d'obtenir les dimensions maximum
 	 * 
 	 * @return un tableau qui contient mix, max, miy, may
+	 * @throws IncompatibleSizeException 
 	 */
-	private float[] getMaxDimensions() {
+	private float[] getMaxDimensions() throws IncompatibleSizeException {
 		float factor = ((Homothetie) z).getfacteur();
 		((Homothetie) z).setfacteur(1);
 		int xNorm = ((Translation) trX).getNorm();
@@ -289,8 +304,14 @@ public class ModelVolume extends Observable {
 	}
 
 	public Point[] getTabPoints() {
-		Matrice m = rotZ.prod(rotY).prod(rotX)
-				.prod(new Homothetie(20));
+		Matrice m = null;
+		try {
+			m = rotZ.multiply(rotY).multiply(rotX)
+					.multiply(new Homothetie(20));
+		} catch (IncompatibleSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Point[] res = new Point[3];
 
 		for (int i = 0; i < 3; i++) {
@@ -307,11 +328,17 @@ public class ModelVolume extends Observable {
 	 * @return la base (matrix)
 	 */
 	private Matrice getBase() {
-		Matrice rotation = rotZ.prod(rotY).prod(rotX);
+		Matrice rotation = null;
+		try {
+			rotation = rotZ.multiply(rotY).multiply(rotX);
+		} catch (IncompatibleSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Matrice res = new Matrice(3, 3);
 
-		for (int i = 0; i < res.tailleHaut(); i++) {
-			for (int j = 0; j < res.tailleLarge(); j++) {
+		for (int i = 0; i < res.nLignes; i++) {
+			for (int j = 0; j < res.nColonnes; j++) {
 				res.set(i, j, rotation.retourneCase(i, j));
 			}
 		}
@@ -323,9 +350,17 @@ public class ModelVolume extends Observable {
 	 * Permet d'executer une rotation selon une matrice
 	 * 
 	 * @param vector
+	 * @throws Exception 
+	 * @throws IncompatibleSizeException 
 	 */
-	public void rotation(Matrice vector) {
-		Matrice vect = getBase().inversionMatrice().prod(vector);
+	public void rotation(Matrice vector) throws IncompatibleSizeException, Exception {
+		Matrice vect = null;
+		try {
+			vect = getBase().inverse().multiply(vector);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		rotation(Rotation.Y_AXIS, (int) vect.retourneCase(0, 0));
 		rotation(Rotation.X_AXIS, (int) vect.retourneCase(1, 0));
 	}

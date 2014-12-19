@@ -6,62 +6,109 @@ package fr.minestate.modif;
  *
  */
 
+import fr.minestate.exception.*;
 
 public class Matrice {
 
-	protected float[][] m;	
+	protected float[][] elem;
+    public int nLignes;
+    public int nColonnes;
 	private final float PRECISION = 0.000001f;
 	
+	
+	/**
+     * Constructeur d'une matrice carree d'identite.
+     */
+    public Matrice( int n) {
+
+	this( n, n);
+	    for ( int i = 0; i < n; i++ )
+		this.elem[i][i] = 1;
+    }
+	
+	/** 
+     * Constructeur d'une matrice a partir d'une existante.
+     * @param m matrice a copier
+     */
+    public Matrice( Matrice m ) {
+	nLignes = m.nLignes;
+	nColonnes = m.nColonnes;
+	elem = new float[nLignes][nColonnes];
+	
+	for ( int i = 0; i < nLignes; i++ ) {
+	    for ( int j = 0; j < nColonnes; j++ ) {
+		elem[i][j] = m.elem[i][j];
+	    }
+	}}
+    
+    
 	/**
 	 * Initialise une matrice avec un tableau
-	 * @param m le tableau avec lequel on veut initialiser la matrice
+	 * @param elem le tableau avec lequel on veut initialiser la matrice
 	 */
-	public Matrice(float[][] m) {
-		this.m = m;
-	}
+	
+	public Matrice( float t[][] ) {
+		nLignes = t.length;
+		nColonnes = t[0].length;
+		elem = new float[nLignes][nColonnes];
+		int i = 0;
+		int j = 0;
+		
+		try {
+		    for ( i = 0; i < nLignes; i++ ) {
+			for ( j = 0; j < nColonnes; j++ ) {
+			    elem[i][j] = t[i][j];
+			} 		
+		    }
+
+		} catch ( ArrayIndexOutOfBoundsException e ) {
+		    System.out.println( "Erreur dans l'initialisation de matrice:" );
+		    System.out.println( "l'element (" + i + "," + j +
+					") n'a pas pu etre trouve." );
+		    return;
+		}
+
+	    }
 	
 	/**
 	 * Permet d'initialiser une matrice
-	 * @param rowCount le nombre de lignes que l'on souhaite
-	 * @param colCount le nombre de colonnes que l'on souhaite
+	 * @param l le nombre de lignes que l'on souhaite
+	 * @param c le nombre de colonnes que l'on souhaite
 	 */
-	public Matrice(int rowCount, int colCount) {
-		this.m = new float[rowCount][colCount];
+	
+	public Matrice(int l, int c) {
+		nLignes = l;
+		nColonnes = c;
+		elem = new float[nLignes][nColonnes];
+		for (int i = 0; i < nLignes; i++) {
+			for (int j = 0; j < nColonnes; j++) {
+				elem[i][j] = 0;
+			}
+		}
 	}
 	
 	/**
-	 * Permet de connaitre la hauteur d'une matrice
-	 * @return la hauteur de la matrice
-	 */
-	public int tailleHaut() {
-		return m.length;
-	}
+     * Addition de matrices element par element.
+     * @param b matrice a ajouter
+     * @exception IncompatibleSizeException quand les dimensions ne 
+     * correspondent pas.
+     * @return 
+      *
+     */
+    public Matrice add( Matrice b ) throws IncompatibleSizeException {
+	// verification des dimensions 
+	if ( ( b.nLignes != nLignes ) || ( b.nColonnes != nColonnes ) )
+	    incompatibilite( this, b, "addTo", "<>" );
 	
-	/**
-	 * Permet de connaitre la largeur d'une matrice
-	 * @return la largeur d'une matrice
-	 */
-	public int tailleLarge() {
-		return m[0].length;
-	}
+	float[][] res = new float[nLignes][nColonnes];
 	
-	/**
-	 * 
-	 * @param matrice
-	 * @return la somme des deux matrices ou null si les matrices sont incompatibles
-	 */
-	public Matrice somme(Matrice matrice) {
-		if (tailleHaut() != matrice.tailleHaut() || tailleLarge() != matrice.tailleLarge()) 
-			return null;
-		
-		float[][] res = new float[tailleHaut()][tailleLarge()];
-		
-		for (int i = 0; i < tailleHaut(); i ++)
-			for (int j = 0; j < tailleLarge(); j++)
-				res[i][j] = retourneCase(i,j) + matrice.retourneCase(i, j);
-				
-		return new Matrice(res);
+	for ( int i = 0; i < nLignes; i++ ) {
+	    for ( int j = 0; j < nColonnes; j++ ) {
+	    	res[i][j] = retourneCase(i,j) + b.retourneCase(i, j);
+	    }
 	}
+	return new Matrice(res);
+    }
 	
 	/**
 	 * Verifie l'egalite entre deux matrices
@@ -69,11 +116,11 @@ public class Matrice {
 	 * @return true si les matrices sont egales, false sinon
 	 */
 	public boolean equals(Matrice matrice) {
-		if (tailleHaut() != matrice.tailleHaut() || tailleLarge() != matrice.tailleLarge()) 
+		if (nLignes != matrice.nLignes || nColonnes != matrice.nColonnes)
 			return false;
 		
-		for (int i = 0; i < tailleHaut(); i ++)
-			for (int j = 0; j < tailleLarge(); j++)
+		for (int i = 0; i < nLignes; i ++)
+			for (int j = 0; j < nColonnes; j++)
 				if (!close(retourneCase(i, j), matrice.retourneCase(i, j))) {
 					return false;
 				}			
@@ -92,7 +139,7 @@ public class Matrice {
 	 * @return
 	 */
 	public float retourneCase(int ligne, int col) {
-		return m[ligne][col];
+		return elem[ligne][col];
 	}
 	
 	/**
@@ -103,130 +150,177 @@ public class Matrice {
 	 * @return
 	 */
 	public void set(int ligne, int col, float value) {
-		m[ligne][col] = value;
+		elem[ligne][col] = value;
 	}
 
-	/**
-	 * Permet d'effectuer un produit de matrice
-	 * @param matrice la matrice a multiplier avec la matrice actuelle
-	 * @return le produit des deux matrices
-	 */
-	public Matrice prod(Matrice matrice) {
-		if (tailleLarge() != matrice.tailleHaut()) {
-			return null;
-		}
-		
-		Matrice res = new Matrice(new float[tailleHaut()][matrice.tailleLarge()]);
-		
-		for (int i = 0; i < res.tailleHaut(); i++) 
-			for (int j = 0; j < res.tailleLarge(); j++) {
-				float value = 0;
-				for (int k = 0; k < tailleLarge(); k++) 
-					value += retourneCase(i, k) * matrice.retourneCase(k, j);
-				res.set(i, j, value);
-			}
-		
-		return res;
-	}
 	
 	/**
-	 * Permet d'inverser une matrice
-	 * @return : la matrice inverse
-	 */
-	public Matrice inversionMatrice() {
-		if (tailleLarge() != tailleHaut())
-			return null;
-		
-		Matrice res = initGauss();
-		
-		for (int i = 0; i < tailleLarge(); i++) {
-			int j = i;
-			while (j < res.tailleHaut() && close(res.retourneCase(j, i), 0)) {
-				j++;
-			}
-			if (j == res.tailleHaut())
-				return null;
-			res.swap(j, i);
-			res.multiplication(j, 1 / res.retourneCase(j, i));
-			for (int k = 0; k < res.tailleHaut(); k++) {
-				if (k == j)
-					continue;
-				res.combi(i, k, - res.retourneCase(k, i));
-			}
+     * Multiplication standard de matrices.
+     * @param b matrice a multiplier a droite
+     * @return la matrice resultat
+     * @exception IncompatibleSizeException quand les dimensions ne 
+     * correspondent pas
+     */
+    public Matrice multiply(Matrice b )
+	throws IncompatibleSizeException 
+    {
+	// verification des dimensions 
+	if ( this.nColonnes != b.nLignes ) 
+	    incompatibilite( this, b, "multiply", "et" );
+	
+	float somme;
+	
+	Matrice c = new Matrice( this.nLignes, b.nColonnes );
+	for ( int i = 0; i < this.nLignes; i++ ) {
+	    for ( int j = 0; j < b.nColonnes; j++ ) {
+		somme = 0;
+		for ( int k = 0; k < this.nColonnes; k++ ) {
+		    somme += this.elem[i][k] * b.elem[k][j];
 		}
-		return concludeGauss(res);
+		c.elem[i][j] = somme;
+	    }
 	}
 	
-	private Matrice initGauss() {
-		Matrice res = new Matrice(new float[tailleHaut()][2 * tailleLarge()]);
-		for (int i = 0; i < tailleHaut(); i ++) {
-			for (int j = 0; j < tailleLarge(); j++) {
-				res.set(i, j, retourneCase(i,j));
-				if (i == j)
-					res.set(i, j + tailleLarge(), 1);
-			}
-		}
-		return res;
+	return c;
+    }
+	
+    
+    /**
+     * Resolution d'un systeme lineaire par la methode de Gauss avec choix du
+     * pivot max.
+     * @param a une matrice carree
+     * @param b une matrice
+     * @return la solution de a*x = b, soit: a^(-1)*b.
+     * @throws Exception 
+     * 
+     */
+    public static Matrice solution( Matrice a, Matrice b )
+	throws Exception {
+	
+	// verification des dimensions
+	if ( a.nColonnes != a.nLignes ) {
+	    String message =
+		new String( "Matrice pas carree dans solution(): " +
+			a.nLignes + "<>" + a.nColonnes );
+	    throw new IncompatibleSizeException( message );
 	}
-	
-	private Matrice concludeGauss(Matrice matrice) {
-		Matrice res = new Matrice(new float[tailleHaut()][tailleLarge()]);
-		for (int i = 0; i < tailleHaut(); i ++) {
-			for (int j = 0; j < tailleLarge(); j++) {
-				res.set(i, j, matrice.retourneCase(i, tailleLarge() + j));
-			}
-		}
-		return res;		
+
+	if ( a.nColonnes != b.nLignes ) {
+	    incompatibilite( a, b, "inverse()", "et" );
 	}
-	
-	/**
-	 * Permet d'inverser deux lignes d'une matrice
-	 * @param l : la 1ere ligne a inverser
-	 * @param l2 : la 2eme ligne a inverser
-	 */
-	private void swap (int l, int l2) {
-		float tmp;
-		for (int i = 0; i < tailleLarge(); i++) {
-			tmp = retourneCase(l, i);
-			set(l, i, retourneCase(l2, i));
+
+	int N = a.nLignes;
+	Matrice aa = new Matrice( a );
+	Matrice x = new Matrice( b );
+	// descente; r+1 est le numero d'etape et de colonne a eliminer
+	for ( int r = 0; r < N; r++ ) {
+	    // recherche du pivot
+	    double pmax = Math.abs( aa.elem[r][r] );
+	    int imax = r;
+	    for ( int i = r+1; i < N; i++ ) {
+		if ( Math.abs( aa.elem[i][r] ) > pmax ) {
+		    imax = i;
+		    pmax = Math.abs( aa.elem[i][r] );
 		}
-	}
-	
-	
-	/**
-	 * Permer de multiplier une ligne par un nombre
-	 * @param b : le nombre avec lequel on va multiplier la ligne
-	 */
-	private void multiplication(int ligne, float b) {
-		for (int i = 0; i < tailleLarge(); i++) {
-			set(ligne, i, retourneCase(ligne, i) * b);
+	    }
+	    if ( pmax == 0.0 ) {
+		throw( new Exception ( "Matrice non inversible" ) );
+	    }
+	    // permutation des lignes de a et b
+	    float tmp;
+	    for ( int j = r; j < N; j++ ) {
+		tmp = aa.elem[r][j];
+		aa.elem[r][j] = aa.elem[imax][j];
+		aa.elem[imax][j] = tmp;
+	    }
+	    for ( int j = 0; j < x.nColonnes; j++ ) {
+		tmp = x.elem[r][j];
+		x.elem[r][j] = x.elem[imax][j];
+		x.elem[imax][j] = tmp;
+	    }
+	    // combinaison lineaire
+	    double pivot;
+	    for ( int i = r+1; i < N; i++ ) {
+		pivot = - aa.elem[i][r] / aa.elem[r][r];
+		for ( int j = r; j < N; j++ ) {
+		    aa.elem[i][j] += pivot * aa.elem[r][j];
 		}
-	}
-	
-	
-	/**
-	 * Permet de changer la valeur de l2 par b* ligne+l2
-	 * @param l
-	 * @param l2
-	 * @param b
-	 */
-	private void combi(int l, int l2, float b) {
-		for (int i = 0; i < tailleLarge(); i++) {
-			set(l2, i, retourneCase(l2, i) + b * retourneCase(l, i));
+		for ( int j = 0; j < x.nColonnes; j++ ) {
+		    x.elem[i][j] += pivot * x.elem[r][j];
 		}
+	    }
 	}
+	// Fin de la descente. Remontee.
+	for ( int r = N-1; r >= 0; r-- ) {
+	    for ( int i = 0; i < r; i++ ) {
+		double pivot = - aa.elem[i][r] / aa.elem[r][r];
+		for ( int j = 0; j < x.nColonnes; j++ ) {
+		    x.elem[i][j] += pivot * x.elem[r][j];
+		}
+	    }
+	    for ( int j = 0; j < x.nColonnes; j++ ) {
+		x.elem[r][j] /= aa.elem[r][r];
+	    }
+	}
+	return x;
+    }
+
+    /**
+     * Inversion d'une matrice par la methode de Gauss avec choix du
+     * pivot max.
+     * @return la matrice a^(-1)
+     * @exception IncompatibleSizeException si la matrice n'est pas carree
+     */
+    public Matrice inverse( )
+	throws Exception, IncompatibleSizeException
+    {
+	// verification des dimensions
+	if ( nColonnes != nLignes ) {
+	    String message =
+		new String( "Matrice pas carree dans inverse(): " +
+			    nLignes + "<>" + nColonnes );
+	    throw new IncompatibleSizeException( message );
+	}
+
+	Matrice b = new Matrice( nColonnes);
+	Matrice x = solution( this, b );
+
+	return x;
+    }
+	
+	 /**
+     * Methode de synthese pour les messages d'erreur dus aux
+     * incompatibilites de dimensions.
+     * @param a matrice en cause
+     * @param b autre matrice en cause
+     * @param fonction nom de la methode ayant cause le probleme
+     * @param type texte explicatif du motif de l'erreur
+     * @exception IncompatibleSizeException dans tous les cas
+     */
+    private static void incompatibilite( Matrice a, Matrice b, 
+					 String fonction, String type ) 
+	throws IncompatibleSizeException
+    {
+	String message =
+	    new String( "Dimensions de matrices incompatibles dans "
+			+ fonction + "(): (" +
+			a.nLignes + "x" + a.nColonnes +
+			") " + type + " (" +
+			b.nLignes + "x" + b.nColonnes + ")" );
+	throw new IncompatibleSizeException( message );
+    }
 	
 	/**
 	 * Permet de donner une representation de la matrice sous forme de chaine de caracteres
 	 */
 	public String toString() {
-		if (m == null)
+		if (elem == null)
 			return "null";
 		String res = "";
 		int i = 0;
-		while (i < tailleHaut()) {
+		while (i < nLignes) {
 			int j = 0;
-			while (j < tailleLarge ()) {
+			while (j < nColonnes) {
 				res = res +  retourneCase(i, j) + "\t";
 				j = j + 1;
 			}

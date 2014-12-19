@@ -12,6 +12,7 @@ import java.util.Observer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import fr.minestate.exception.IncompatibleSizeException;
 import fr.minestate.figure.Face;
 import fr.minestate.utils.Point;
 
@@ -70,7 +71,13 @@ public class VueVolume extends JPanel implements Observer {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);		
-		Collection<Face> triangles = modelVolume.retourneListeTriangles();
+		Collection<Face> triangles = null;
+		try {
+			triangles = modelVolume.retourneListeTriangles();
+		} catch (IncompatibleSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(fdf)
 			for (Face t : triangles) 
 				dessineTriangleFilDeFer(t, g);
