@@ -83,7 +83,7 @@ public class Fenetre extends JFrame {
 				}
 			if (estGts2) {
 				vm = LireGts.lireFichier(fichier2);
-				this.info = new InfoBar (this, vm.nom);// rajout 
+				this.info = new InfoBar (this, vm.nom, vm.chemin);// rajout 
 				this.add(info, BorderLayout.SOUTH);// rajout
 				JPanel panel = this.getPan();
 				VueVolume vue = new VueVolume();

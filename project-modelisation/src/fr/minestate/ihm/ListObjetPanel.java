@@ -148,23 +148,11 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		if (estGts2) {
-			/*
-			this.mv = LireGts.lireFichier(fichier2);
-			this.mv.initVolume();
-			JPanel pan = this.fen.getPan();
-			MenuBarre me = this.fen.getmenuBarre();
-			pan.removeAll();
-			pan.add(me.getVue());
-			pan.repaint();
-			me.setMv(mv);
-			this.fen.setPan(pan);
-			this.fen.add(this.fen.getPan());
-			this.fen.getPan().repaint();
-			this.fen.revalidate();
-			*/
+			
 			
 			this.vm = LireGts.lireFichier(fichier2);
-			this.fen.info.setName(vm.nom); // rajout
+			//this.fen.info.setName(vm.nom); // permet de mettre a jour INFOBAR 
+			this.fen.info.setInfos(vm.nom, vm.chemin); // maj infos
 			this.vm.initVolume();
 			JPanel pan = this.fen.getPan();
 			

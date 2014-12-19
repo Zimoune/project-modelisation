@@ -81,7 +81,7 @@ public class LireGts {
 		String[] nom = selectedFile.getPath().split("\\\\");	
 		nom = nom[nom.length - 1].split("[.]");
 
-		/* Prenom represente le nom de l'objet*/
+		/* Recuperer nom objet : Prenom represente le nom de l'objet */
 		int indicePrenom = 0;
 		int cptSlash = 0;
 		String nom1 = nom[1];
@@ -98,8 +98,11 @@ public class LireGts {
 
 		System.out.println("Indice prenom = " + indicePrenom);
 		String prenom = nom1.substring(indicePrenom, nom1.length());
-
 		volume.setName(prenom);
+		
+		/* Recuperer chemin objet*/
+		System.out.println("LireGts, le chemin de l'objet est : " + nom[1]);
+		volume.setChemin(nom[1]);
 
 		return volume;
 	}

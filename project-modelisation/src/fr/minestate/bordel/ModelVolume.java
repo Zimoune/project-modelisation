@@ -36,7 +36,16 @@ public class ModelVolume extends Observable {
 	private Modification trX;
 	private Modification trY;
 	private Modification z;
+	public String chemin;
 	
+
+	public String getChemin() {
+		return chemin;
+	}
+
+	public void setChemin(String chemin) {
+		this.chemin = chemin;
+	}
 
 	/**
 	 * Initialise un VolumeModel

@@ -23,39 +23,63 @@ public class InfoBar extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	Fenetre fen;
-	JLabel labName;
-	JLabel lien;
+	JLabel labName; // le nom de l'objet
+	JLabel labLien;
+	JLabel affichage;
 	Connexion con = null;
 	private String name;
+	private String lien;
 	Map<String, String> info = new HashMap<String, String>();
 
-	public InfoBar(Fenetre fen, String name) {
+	public InfoBar(Fenetre fen, String name, String lien) {
 		this.fen = fen;
 		this.name = name;
+		this.lien = lien;
 		System.out.println("InfoBar, name = " + this.name);
 		this.setBackground(Color.LIGHT_GRAY);
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		initCompo();
 		this.setVisible(true);
 	}
 
 	private void initCompo() {
+		// pour le nom
 		labName = new JLabel();
-		labName.setText(name);
+		labName.setText("Nom : " + name);
 		labName.setPreferredSize(new Dimension(140, 30));
-		lien = new JLabel();
-		lien.setPreferredSize(new Dimension(140, 30));
+		
+		// pour le chemin
+		labLien = new JLabel();
+		labName.setText("Chemin : " + lien);
+		labLien.setPreferredSize(new Dimension(140, 30));
+		
+		affichage = new JLabel();
+		affichage.setText("Nom objet: " + name + "     Chemin  :" + lien);
+		affichage.setPreferredSize(new Dimension(500, 30));
+		
+		/*
 		con = new Connexion();
 		info = con.getInfo(name);
 		con.closeConnexion();
-		//labName.setText(info.get("nom"));
-		lien.setText(info.get("lien"));
-		this.add(labName);
-		this.add(lien);
+		*/
+		labLien.setText(info.get("lien"));
+		this.add(affichage);
+		//this.add(labName);
+		//this.add(labLien);
 	}
 	
 	public void setName (String name) {
-		this.labName.setText(name);
+		this.labName.setText("Nom : " + name);
+		this.revalidate();
+	}
+	
+	public void setChemin (String chemin) {
+		this.labName.setText("Nom : " + name);
+		this.revalidate();
+	}
+	
+	public void setInfos (String nom, String chemin) {
+		this.affichage.setText("Nom : " + nom + "	Chemin : " + chemin);
 		this.revalidate();
 	}
 }

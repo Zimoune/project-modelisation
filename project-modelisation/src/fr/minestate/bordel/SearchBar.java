@@ -122,6 +122,7 @@ public class SearchBar extends JPanel implements KeyListener,
 			}
 		if (estGts) {
 			this.fen.vm = LireGts.lireFichier(fichier);
+			this.fen.info.setInfos(this.fen.vm.nom, this.fen.vm.chemin);
 			this.fen.vm.initVolume();
 			JPanel panel = this.fen.getPan();
 			VueVolume vue = new VueVolume();
