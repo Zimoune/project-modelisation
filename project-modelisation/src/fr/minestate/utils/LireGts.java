@@ -80,7 +80,27 @@ public class LireGts {
 
 		String[] nom = selectedFile.getPath().split("\\\\");	
 		nom = nom[nom.length - 1].split("[.]");
-		volume.setName(nom[0]);
+
+		/* Prenom represente le nom de l'objet*/
+		int indicePrenom = 0;
+		int cptSlash = 0;
+		String nom1 = nom[1];
+		System.out.println("Nom1 = " + nom1);
+		
+		for (int i =0; i < nom1.length(); i++) {
+			if (nom1.charAt(i) == '/') {
+					cptSlash ++;
+					if (cptSlash ==3) {
+						indicePrenom = i+1;
+					}
+			}
+		}
+
+		System.out.println("Indice prenom = " + indicePrenom);
+		String prenom = nom1.substring(indicePrenom, nom1.length());
+
+		volume.setName(prenom);
+
 		return volume;
 	}
 

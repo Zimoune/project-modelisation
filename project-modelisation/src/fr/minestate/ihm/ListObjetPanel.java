@@ -164,6 +164,7 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			*/
 			
 			this.vm = LireGts.lireFichier(fichier2);
+			this.fen.info.setName(vm.nom); // rajout
 			this.vm.initVolume();
 			JPanel pan = this.fen.getPan();
 			

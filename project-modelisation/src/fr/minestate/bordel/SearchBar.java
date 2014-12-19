@@ -136,6 +136,7 @@ public class SearchBar extends JPanel implements KeyListener,
 			vue.setVisible(true);
 			vue.setBackground(Color.gray);
 			this.fen.menuBarre.setVue(vue);
+			this.fen.info.setName(this.fen.vm.nom);
 
 			panel.setLayout(null);
 			vue.revalidate();

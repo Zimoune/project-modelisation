@@ -26,8 +26,10 @@ public class Fenetre extends JFrame {
 	private JPanel mainPanel;
 	private VolumeChangerModel volumeChangerModel;
 	public MenuBarre menuBarre;
+	ModelVolume vm = null;
 	private SearchBar searchBar = new SearchBar(this);
-	ModelVolume vm;
+	public InfoBar info; // rajout
+	
 
 	public MenuBarre getmenuBarre() {
 		return menuBarre;
@@ -56,6 +58,7 @@ public class Fenetre extends JFrame {
 		this.setPreferredSize(new Dimension(1024, 728));
 		this.volumeChangerModel = new VolumeChangerModel();
 		this.menuBarre = new MenuBarre(volumeChangerModel, this, true);
+
 		this.mainPanel = new JPanel();
 		this.panel.setLayout(null);
 		this.getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -80,6 +83,8 @@ public class Fenetre extends JFrame {
 				}
 			if (estGts2) {
 				vm = LireGts.lireFichier(fichier2);
+				this.info = new InfoBar (this, vm.nom);// rajout 
+				this.add(info, BorderLayout.SOUTH);// rajout
 				JPanel panel = this.getPan();
 				VueVolume vue = new VueVolume();
 				vue.setBounds(0, 0, 1024, 700);
