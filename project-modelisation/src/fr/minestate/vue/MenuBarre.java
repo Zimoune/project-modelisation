@@ -1,10 +1,9 @@
 package fr.minestate.vue;
 
 import java.awt.Color;
+import fr.minestate.bordel.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,17 +16,18 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
+
 
 import fr.minestate.bdd.Connexion;
 import fr.minestate.exception.FichierException;
 import fr.minestate.ihm.ListObjetPanel;
-import fr.minestate.models.ModelVolume;
 import fr.minestate.models.VolumeChangerModel;
 import fr.minestate.modif.DeplacerVolume;
-import fr.minestate.modif.Translation;
 import fr.minestate.utils.FiltreSimple;
 import fr.minestate.utils.LireGts;
+
+
+
 
 /**
  * Permet de definir la barre de menu en haut de l'ecran
@@ -66,6 +66,8 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 	private JMenuItem delLumiere;
 	private JMenuItem reload;
 	private JMenuItem filDeFer;
+	private JMenuItem motsCles;
+	
 	public ListObjetPanel lop2 = null;
 	boolean loadBdd = false;
 	boolean load = false;
@@ -114,6 +116,9 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 
 		reload = new JMenuItem("Default location");
 		reload.addActionListener(this);
+		
+		motsCles = new JMenuItem ("Mots cles");
+		motsCles.addActionListener(this);
 
 		file.add(save);
 		file.add(open);
@@ -124,6 +129,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		edit.add(delLumiere);
 		edit.add(reload);
 		edit.add(filDeFer);
+		edit.add(motsCles);
 
 		add(file);
 		add(edit);

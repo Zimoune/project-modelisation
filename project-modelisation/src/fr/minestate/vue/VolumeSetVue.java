@@ -1,13 +1,14 @@
 package fr.minestate.vue;
 
 import java.util.Observable;
+
 import java.util.Observer;
 
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import fr.minestate.models.ModelVolume;
+import fr.minestate.bordel.ModelVolume;
 import fr.minestate.models.VolumeChangerModel;
 import fr.minestate.modif.DeplacerVolume;
 

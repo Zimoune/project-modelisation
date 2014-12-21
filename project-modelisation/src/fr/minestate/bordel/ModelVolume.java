@@ -37,7 +37,16 @@ public class ModelVolume extends Observable {
 	private Modification trY;
 	private Modification z;
 	public String chemin;
+	public String [] motsCles;
 	
+
+	public String[] getMotsCles() {
+		return motsCles;
+	}
+
+	public void setMotsCles(String[] motsCles) {
+		this.motsCles = motsCles;
+	}
 
 	public String getChemin() {
 		return chemin;
@@ -74,6 +83,7 @@ public class ModelVolume extends Observable {
 	 *            le nom que l'on souhaite donner au VolumModel
 	 */
 	public ModelVolume(Collection<Face> c, String nom) {
+		this.motsCles = new String [5];
 		this.nom = nom;
 		Iterator<Face> it = c.iterator();
 		while (it.hasNext()) {

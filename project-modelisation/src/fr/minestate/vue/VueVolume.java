@@ -8,13 +8,12 @@ import java.awt.event.MouseWheelListener;
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+import fr.minestate.exception.IncompatibleSizeException;
 import fr.minestate.figure.Face;
-import fr.minestate.models.ModelVolume;
 import fr.minestate.utils.Point;
+import fr.minestate.bordel.*;
 
 /**
  * Panel permettant de dessiner un volume
@@ -58,9 +57,9 @@ public class VueVolume extends JPanel implements Observer {
 	 * Permet de changer le modelVolume
 	 * @param le nouveau modelVolume
 	 */
-	public void setVolumeModel(ModelVolume modelVolume) {
-		modelVolume.deleteObservers();
-		this.modelVolume = modelVolume;
+	public void setVolumeModel(fr.minestate.bordel.ModelVolume vm) {
+		vm.deleteObservers();
+		this.modelVolume = vm;
 		this.modelVolume.addObserver(this);
 		repaint();
 	}
@@ -71,7 +70,13 @@ public class VueVolume extends JPanel implements Observer {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);		
-		Collection<Face> triangles = modelVolume.retourneListeTriangles();
+		Collection<Face> triangles = null;
+		try {
+			triangles = modelVolume.retourneListeTriangles();
+		} catch (IncompatibleSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(fdf)
 			for (Face t : triangles) 
 				dessineTriangleFilDeFer(t, g);

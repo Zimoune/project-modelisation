@@ -1,6 +1,7 @@
 package fr.minestate.vue;
 
 import java.awt.BorderLayout;
+import fr.minestate.bordel.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -22,6 +23,7 @@ import fr.minestate.bdd.Connexion;
 import fr.minestate.exception.FichierException;
 import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.LireGts;
+import fr.minestate.bordel.*;
 
 public class SearchBar extends JPanel implements KeyListener,
 		ListSelectionListener {
@@ -31,7 +33,7 @@ public class SearchBar extends JPanel implements KeyListener,
 	Connexion con = null;
 	JList<?> jcb;
 	DefaultListModel<String> model = new DefaultListModel<String>();
-	Fenetre fen;
+	fr.minestate.bordel.Fenetre fen;
 
 	public SearchBar(Fenetre fen) {
 		this.fen = fen;
@@ -90,25 +92,28 @@ public class SearchBar extends JPanel implements KeyListener,
 			list[i] = (String) it.next();
 			System.out.println(list[i]);
 			i++;
-			
+
 		}
 		model.clear();
-		for (String s : list){
-			System.out.println("on ajoute "+s);
+		for (String s : list) {
+			System.out.println("on ajoute " + s);
 			model.addElement(s);
 		}
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-	
+
 		this.jcb.repaint();
-		if (arg0.getValueIsAdjusting())return;
-		if(this.jcb.isSelectionEmpty())return;
+		if (arg0.getValueIsAdjusting())
+			return;
+		if (this.jcb.isSelectionEmpty())
+			return;
 		System.out.println("Bou");
 		boolean estGts = false;
 		System.out.println(this.jcb.getSelectedIndex());
-		String chemin = this.listObject.get((String)this.jcb.getSelectedValue());
+		String chemin = this.listObject.get((String) this.jcb
+				.getSelectedValue());
 		File fichier = new File(chemin);
 		String extension = fichier.getName().substring(
 				fichier.getName().length() - 4, fichier.getName().length());
@@ -124,7 +129,7 @@ public class SearchBar extends JPanel implements KeyListener,
 			this.fen.vm = LireGts.lireFichier(fichier);
 			this.fen.vm.initVolume();
 			JPanel panel = this.fen.getPan();
-			VueVolume vue = new VueVolume();
+			fr.minestate.bordel.VueVolume vue = new fr.minestate.bordel.VueVolume();
 			vue.setBounds(0, 0, 1024, 700);
 			vue.suppMouvementListener();
 			vue.suppMouseWheel();

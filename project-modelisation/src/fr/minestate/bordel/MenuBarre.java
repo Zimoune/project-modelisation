@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import fr.minestate.bdd.Connexion;
 import fr.minestate.exception.FichierException;
 import fr.minestate.ihm.ListObjetPanel;
+import fr.minestate.ihm.ModificationPanel;
 import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.FiltreSimple;
 import fr.minestate.utils.LireGts;
@@ -58,6 +59,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 	private JMenuItem exit;
 	private JMenuItem openBdd;
 
+
 	/*
 	 * Items du menu edit
 	 */
@@ -66,7 +68,9 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 	private JMenuItem reload;
 	private JMenuItem filDeFer;
 	private JMenuItem infosObjet;
+	private JMenuItem motsCles;
 	public ListObjetPanel lop2 = null;
+	
 	boolean loadBdd = false;
 	boolean load = false;
 
@@ -118,6 +122,9 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 
 		reload = new JMenuItem("Default location");
 		reload.addActionListener(this);
+		
+		motsCles = new JMenuItem ("Mots clefs");
+		motsCles.addActionListener(this);
 
 		file.add(save);
 		file.add(open);
@@ -128,6 +135,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		edit.add(delLumiere);
 		edit.add(reload);
 		edit.add(filDeFer);
+		edit.add(motsCles);
 
 		infos.add(infosObjet);
 
@@ -176,6 +184,13 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		if (arg0.getSource() == this.delLumiere) {
 
 		}
+		
+		if(arg0.getSource() == this.motsCles) {
+			System.out.println("On va afficher les mots cles de l'objet");
+			ModificationPanel mb = new ModificationPanel(this.ms);
+		}
+		
+		
 		if (arg0.getSource() == this.infosObjet) {
 
 			/*

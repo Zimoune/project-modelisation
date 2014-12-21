@@ -26,7 +26,7 @@ public class Fenetre extends JFrame {
 	private JPanel mainPanel;
 	private VolumeChangerModel volumeChangerModel;
 	public MenuBarre menuBarre;
-	ModelVolume vm = null;
+	public ModelVolume vm = null;
 	private SearchBar searchBar = new SearchBar(this);
 	public InfoBar info; // rajout
 	

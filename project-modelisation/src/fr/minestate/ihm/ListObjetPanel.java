@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import fr.minestate.bdd.Connexion;
-import fr.minestate.bordel.Fenetre;
+import fr.minestate.bordel.*;
 import fr.minestate.bordel.MenuBarre;
 import fr.minestate.bordel.ModelVolume;
 import fr.minestate.bordel.VolumeChangerModel;

@@ -1,6 +1,7 @@
 package fr.minestate.models;
 
 import java.util.ArrayList;
+import fr.minestate.bordel.*;
 import java.util.Observable;
 
 import fr.minestate.modif.DeplacerVolume;

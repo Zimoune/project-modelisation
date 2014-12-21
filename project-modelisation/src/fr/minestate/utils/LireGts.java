@@ -78,6 +78,7 @@ public class LireGts {
 			return null;
 		}
 
+
 		String[] nom = selectedFile.getPath().split("\\\\");	
 		nom = nom[nom.length - 1].split("[.]");
 
