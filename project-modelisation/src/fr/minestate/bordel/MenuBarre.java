@@ -111,10 +111,10 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		exit = new JMenuItem("Exit");
 		exit.addActionListener(this);
 
-		addLumiere = new JMenuItem("+ lumiÃ¨re");
+		addLumiere = new JMenuItem("+ lumière");
 		addLumiere.addActionListener(this);
 
-		delLumiere = new JMenuItem("- lumiÃ¨re");
+		delLumiere = new JMenuItem("- lumière");
 		delLumiere.addActionListener(this);
 
 		filDeFer = new JMenuItem("Fil de fer");
@@ -179,10 +179,18 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 
 		}
 		if (arg0.getSource() == this.addLumiere) {
-
+			vue.puissanceLumiere += 0.1;
+			 vue.revalidate();
+			 ms.getPan().removeAll();
+			 ms.getPan().add(vue);
+			 vue.repaint();
 		}
 		if (arg0.getSource() == this.delLumiere) {
-
+			vue.puissanceLumiere -= 0.1;
+			vue.revalidate();
+			ms.getPan().removeAll();
+			ms.getPan().add(vue);
+			vue.repaint();
 		}
 		
 		if(arg0.getSource() == this.motsCles) {
@@ -308,7 +316,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		}
 
 	}
-
+	
 	private void recharger() {
 
 		if (mv == null) {
