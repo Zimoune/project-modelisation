@@ -97,7 +97,12 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			Connexion con = new Connexion();
 			String chemin = con.getCheminObjet(this.comboBox.getSelectedItem()
 					.toString());
-			this.vm = this.loadFile(chemin);
+			try {
+				this.vm = this.loadFile(chemin);
+			} catch (FichierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.setVm(vm);
 			
 			System.out.println("LOP : this.vm = " + this.vm.toString());
@@ -130,8 +135,9 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 	 * 
 	 * @param lien
 	 *            le lien du fichier
+	 * @throws FichierException 
 	 */
-	private ModelVolume loadFile(String lien) {
+	private ModelVolume loadFile(String lien) throws FichierException {
 		boolean estGts2 = false;
 		File fichier2 = new File(lien);
 		String extension2 = fichier2.getName().substring(

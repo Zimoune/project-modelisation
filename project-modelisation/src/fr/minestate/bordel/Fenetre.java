@@ -82,7 +82,12 @@ public class Fenetre extends JFrame {
 					e1.printStackTrace();
 				}
 			if (estGts2) {
-				vm = LireGts.lireFichier(fichier2);
+				try {
+					vm = LireGts.lireFichier(fichier2);
+				} catch (FichierException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				this.info = new InfoBar (this, vm.nom, vm.chemin);// rajout 
 				this.add(info, BorderLayout.SOUTH);// rajout
 				JPanel panel = this.getPan();

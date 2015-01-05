@@ -171,7 +171,12 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		}
 		// Si on clique sur le bouton open
 		if (arg0.getSource() == this.open) {
-			load();
+			try {
+				load();
+			} catch (FichierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		// Si on clique sur le bouton ouvrir bdd
 		if (arg0.getSource() == this.openBdd) {
@@ -361,7 +366,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		this.vue = vue;
 	}
 
-	private void load() {
+	private void load() throws FichierException {
 		load = true;
 		loadBdd = false;
 		FiltreSimple gts2 = new FiltreSimple("Fichiers GTS", ".gts");
@@ -435,28 +440,36 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 	}
 
 	private void sauvegarder() {
-		FiltreSimple gts = new FiltreSimple("Fichiers GTS", ".gts");
-		JFileChooser jf = new JFileChooser();
-		boolean estGts = false;
-		jf.addChoosableFileFilter(gts);
-		jf.showOpenDialog(null);
-		// Récupération du fichier
-		File fichier = jf.getSelectedFile();
-		if (fichier == null)
-			return;
-		String extension = fichier.getName().substring(
-				fichier.getName().length() - 4, fichier.getName().length());
-		if (extension.equals(".gts")) {
-			estGts = true;
-		} else
-			try {
-				throw new FichierException("Format de fichier incorrect.");
-			} catch (FichierException e1) {
-				e1.printStackTrace();
+		try{
+			
+			FiltreSimple gts = new FiltreSimple("Fichiers GTS", ".gts");
+			JFileChooser jf = new JFileChooser();
+			boolean estGts = false;
+			jf.addChoosableFileFilter(gts);
+			jf.showOpenDialog(null);
+			// Récupération du fichier
+			File fichier = jf.getSelectedFile();
+			
+			if (fichier == null)
+				return;
+			String extension = fichier.getName().substring(
+					fichier.getName().length() - 4, fichier.getName().length());
+			if (extension.equals(".gts")) {
+				estGts = true;
+			} else
+				try {
+					throw new FichierException("Format de fichier incorrect.");
+				} catch (FichierException e1) {
+					e1.printStackTrace();
+				}
+			if (estGts) {
+				LireGts.lireFichier(fichier);
+				copyFile(fichier);
 			}
-		if (estGts) {
-			copyFile(fichier);
+		} catch (Exception e){
+			e.printStackTrace();
 		}
+		
 
 	}
 

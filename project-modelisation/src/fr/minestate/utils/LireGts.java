@@ -6,8 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import fr.minestate.bordel.ModelVolume;
 import fr.minestate.bordel.VolumeChangerModel;
+import fr.minestate.exception.FichierException;
 import fr.minestate.figure.Segment;
 import fr.minestate.figure.Face;
 
@@ -32,8 +35,9 @@ public class LireGts {
 	 * Permet de recuperer les listePoints, les listeSegments et les listeTriangles du fichier GTS.
 	 * @param selectedFile le fichier a analyser
 	 * @return le VolumeModel associe au fichier GTS
+	 * @throws FichierException 
 	 */
-	public static ModelVolume lireFichier(File selectedFile) {
+	public static ModelVolume lireFichier(File selectedFile) throws FichierException {
 		ModelVolume volume = new ModelVolume();
 		try {
 			FileReader fr = new FileReader(selectedFile);
@@ -69,13 +73,13 @@ public class LireGts {
 			fr.close();
 			buff.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			throw new FichierException("Fichier non trouvé !");
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new FichierException("Fichier incorrect !");
 		} catch(NumberFormatException e) {
-			e.printStackTrace();
-			System.out.println("Fichier incorrect !");
-			return null;
+			throw new FichierException("Fichier incorrect !");
+		} catch(Exception e){
+			throw new FichierException("Fichier incorrect !");
 		}
 
 

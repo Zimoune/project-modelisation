@@ -121,7 +121,12 @@ public class SearchBar extends JPanel implements KeyListener,
 				e1.printStackTrace();
 			}
 		if (estGts) {
-			this.fen.vm = LireGts.lireFichier(fichier);
+			try {
+				this.fen.vm = LireGts.lireFichier(fichier);
+			} catch (FichierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.fen.info.setInfos(this.fen.vm.nom, this.fen.vm.chemin);
 			this.fen.vm.initVolume();
 			JPanel panel = this.fen.getPan();

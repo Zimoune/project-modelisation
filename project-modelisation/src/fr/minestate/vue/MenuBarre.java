@@ -162,7 +162,12 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		}
 		// Si on clique sur le bouton open
 		if (arg0.getSource() == this.open) {
-			load();
+			try {
+				load();
+			} catch (FichierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		// Si on clique sur le bouton ouvrir bdd
 		if (arg0.getSource() == this.openBdd) {
@@ -301,7 +306,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		this.vue = vue;
 	}
 
-	private void load() {
+	private void load() throws FichierException {
 		load = true;
 		loadBdd = false;
 		FiltreSimple gts2 = new FiltreSimple("Fichiers GTS", ".gts");
@@ -445,7 +450,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		return true; // Résultat OK
 	}
 
-	public void reloadAmaury(File fichier) {
+	public void reloadAmaury(File fichier) throws FichierException {
 		mv = LireGts.lireFichier(fichier);
 		JPanel pan = this.ms.getPan();
 		vue = new VueVolume();
