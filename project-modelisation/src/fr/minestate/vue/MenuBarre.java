@@ -397,6 +397,8 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		if (estGts) {
 			copyFile(fichier);
 		}
+		else
+			System.out.println("PAS GTS");
 
 	}
 

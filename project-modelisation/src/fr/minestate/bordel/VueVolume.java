@@ -32,6 +32,11 @@ public class VueVolume extends JPanel implements Observer {
 	public boolean isFdf() {
 		return fdf;
 	}
+	public VueVolume(ModelVolume v) {
+		add(new JLabel(v.getName()));
+		this.modelVolume = v;
+		this.modelVolume.addObserver(this);
+	}
 
 	public void setFdf(boolean fdf) {
 		this.fdf = fdf;
@@ -90,10 +95,10 @@ public class VueVolume extends JPanel implements Observer {
 
 
 	/**
-	 * Cette fonction permet de definir la couleur de la face selon son exposition à la lumiere
+	 * Cette fonction permet de definir la couleur de la face selon son exposition ï¿½ la lumiere
 	 * @param c couleur de base du triangle a afficher
 	 * @param angle en radian entre la normale et le vecteur lumiere
-	 * @param power puissance de luminosité
+	 * @param power puissance de luminositï¿½
 	 */
 	private Color illumine(Color c, float angle, float power) {
 		if (angle<0 || angle>(Math.PI/2))

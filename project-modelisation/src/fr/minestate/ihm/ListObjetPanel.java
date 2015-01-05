@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -15,10 +16,6 @@ import javax.swing.JPanel;
 
 import fr.minestate.bdd.Connexion;
 import fr.minestate.bordel.*;
-import fr.minestate.bordel.MenuBarre;
-import fr.minestate.bordel.ModelVolume;
-import fr.minestate.bordel.VolumeChangerModel;
-import fr.minestate.bordel.VueVolume;
 import fr.minestate.exception.FichierException;
 import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.LireGts;

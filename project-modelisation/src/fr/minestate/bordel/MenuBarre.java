@@ -111,10 +111,10 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		exit = new JMenuItem("Exit");
 		exit.addActionListener(this);
 
-		addLumiere = new JMenuItem("+ lumière");
+		addLumiere = new JMenuItem("+ lumiere");
 		addLumiere.addActionListener(this);
 
-		delLumiere = new JMenuItem("- lumière");
+		delLumiere = new JMenuItem("- lumiere");
 		delLumiere.addActionListener(this);
 
 		filDeFer = new JMenuItem("Fil de fer");

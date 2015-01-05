@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,8 +63,10 @@ public class Connexion {
 		int i = 0;
 		this.connexion = this.getConnexion();
 		try {
+			System.out.println("ici");
 			this.pstmt = this.connexion.prepareStatement(query);
 			i = this.pstmt.executeUpdate();
+			System.out.println("i:"+i);
 			this.pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -72,7 +75,6 @@ public class Connexion {
 	}
 
 	public ResultSet getExecuteStatement(String query) {
-		this.connexion = this.getConnexion();
 		ResultSet r = null;
 		try {
 			this.pstmt = this.connexion.prepareStatement(query);
@@ -155,6 +157,7 @@ public class Connexion {
 			else{
 				System.out.println("objet introuvable");
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -169,10 +172,16 @@ public class Connexion {
 		int rs = this.getUpdateStatement("DELETE FROM objets WHERE nom='"+objet+"';");
 		System.out.println("Result: "+rs);
 		if(rs == 0){
-			System.out.println("Objet non existant");
+			System.out.println("Problème");
 		}
 		else{
 			System.out.println("Suppression ok");
+			try {
+				this.connexion.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -189,6 +198,74 @@ public class Connexion {
 			e.printStackTrace();
 		}
 		return mapObjet;
+	}
+
+	public void executeRequest(String request) {
+		int i = 0;
+		this.connexion = this.getConnexion();
+		try {
+			this.pstmt = this.connexion.prepareStatement(request);
+			i = this.pstmt.executeUpdate();
+			this.pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("i="+i);
+	}
+	
+	public void executeSelect(String objet){
+		ResultSet rs = this.getExecuteStatement("SELECT * FROM objets WHERE nom='"+objet+"';");
+		try {
+			while(rs.next()){
+				System.out.println(rs.getString("ids"));
+				System.out.println(rs.getString("nom"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public int addKeyWords(String objet, ArrayList<String> list){
+		int idObjet;
+		ResultSet rs = this.getExecuteStatement("SELECT ids FROM objets WHERE nom='"+objet+"';");
+		int i = -1;
+		try {
+			if(rs.next()){
+				System.out.println("Objet trouvé");
+				idObjet = Integer.parseInt(rs.getString("id"));
+				for(String s:list)
+				i = this.getUpdateStatement("INSERT INTO keywords VALUES("+idObjet+", '"+s+"')");
+			}
+			else
+				System.out.println("Objet inconnu");
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+
+		return i;
+	}
+
+	public ArrayList<String> getKeyWords(String nom) {
+		ArrayList<String> list = new ArrayList<String>();
+		ResultSet rs = this.getExecuteStatement("SELECT id FROM objets WHERE nom = '"+nom+"';");
+		try {
+			if(rs.next()){
+				if(rs.getString("id")!= null){
+					int id = Integer.parseInt(rs.getString("id"));
+					rs = this.getExecuteStatement("SELECT DISTINCT keywords FROM keywords WHERE id = '"+id+"';");
+					while(rs.next())
+						list.add(rs.getString("keywords"));
+				}	
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }

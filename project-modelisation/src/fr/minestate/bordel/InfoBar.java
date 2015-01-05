@@ -2,6 +2,7 @@ package fr.minestate.bordel;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +44,13 @@ public class InfoBar extends JPanel {
 	}
 
 	private void initCompo() {
+		con = new Connexion();
+		ArrayList<String> kw = con.getKeyWords(name);
+		con.closeConnexion();
+		String kwl = "Mots clés";
+		for(String s: kw){
+			kwl += "   "+s;
+		}
 		// pour le nom
 		labName = new JLabel();
 		labName.setText("Nom : " + name);
@@ -54,7 +62,7 @@ public class InfoBar extends JPanel {
 		labLien.setPreferredSize(new Dimension(140, 30));
 		
 		affichage = new JLabel();
-		affichage.setText("Nom objet: " + name + "     Chemin  :" + lien);
+		this.affichage.setText("Nom : " + name + "   Chemin : " + lien +"   "+kwl);
 		affichage.setPreferredSize(new Dimension(500, 30));
 		
 		/*
@@ -68,18 +76,16 @@ public class InfoBar extends JPanel {
 		//this.add(labLien);
 	}
 	
-	public void setName (String name) {
-		this.labName.setText("Nom : " + name);
-		this.revalidate();
-	}
-	
-	public void setChemin (String chemin) {
-		this.labName.setText("Nom : " + name);
-		this.revalidate();
-	}
-	
 	public void setInfos (String nom, String chemin) {
-		this.affichage.setText("Nom : " + nom + "	Chemin : " + chemin);
+		con = new Connexion();
+		ArrayList<String> kw = con.getKeyWords(nom);
+		String kwl = "Mots clés";
+		for(String s: kw){
+			System.out.println("mot cle: "+s);
+			kwl += "   "+s;
+		}
+		con.closeConnexion();
+		this.affichage.setText("Nom : " + nom + "   Chemin : " + chemin+"   "+kwl);
 		this.revalidate();
 	}
 }
