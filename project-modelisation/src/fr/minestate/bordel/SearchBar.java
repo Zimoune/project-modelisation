@@ -123,6 +123,7 @@ public class SearchBar extends JPanel implements KeyListener,
 		if (estGts) {
 			try {
 				this.fen.vm = LireGts.lireFichier(fichier);
+				
 			} catch (FichierException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -131,6 +132,7 @@ public class SearchBar extends JPanel implements KeyListener,
 			this.fen.vm.initVolume();
 			JPanel panel = this.fen.getPan();
 			VueVolume vue = new VueVolume();
+			this.fen.vm.vue = vue;
 			vue.setBounds(0, 0, 1024, 700);
 			vue.suppMouvementListener();
 			vue.suppMouseWheel();
@@ -139,6 +141,7 @@ public class SearchBar extends JPanel implements KeyListener,
 					.getMouseController(this.fen.vm));
 			vue.addMouseWheelListener(DeplacerVolume
 					.getMouseWheelController(this.fen.vm));
+			vue.addMouseListener(DeplacerVolume.getMouseListenerAmaury(this.fen.vm));// test
 			vue.setVisible(true);
 			vue.setBackground(Color.gray);
 			this.fen.menuBarre.setVue(vue);

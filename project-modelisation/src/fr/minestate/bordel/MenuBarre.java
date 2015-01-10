@@ -18,6 +18,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import fr.minestate.bdd.Connexion;
 import fr.minestate.exception.FichierException;
@@ -33,14 +36,16 @@ import fr.minestate.utils.LireGts;
  * @author scta
  * 
  */
-public class MenuBarre extends JMenuBar implements Observer, ActionListener {
+public class MenuBarre extends JMenuBar implements Observer, ActionListener, ChangeListener {
 	private VolumeChangerModel volumeSetModel;
 	private Fenetre ms;
-	VueVolume vue;
+	public VueVolume vue;
 	public ModelVolume mv;
 	ListObjetPanel pol = null;
 	File fichier2 = null;
 	private Map<String, String> listObjet; // nom & lien
+	JSlider slider;
+	JFloatSlider jfs;
 
 	/*
 	 * Menus déroulant
@@ -143,6 +148,12 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		add(edit);
 		add(infos);
 		this.setBackground(new Color(27, 126, 179));
+		
+		// Controleur de puissance lumineuse
+		jfs = new JFloatSlider (0,0.0f, 2.5f, 1.25f, 0.5f);
+		jfs.addChangeListener(this);
+		this.add(jfs);
+		
 	}
 
 	/**
@@ -429,13 +440,16 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		JPanel pan = this.ms.getPan();
 		pan.removeAll();
 		pan.setLayout(null);
-		pol = new ListObjetPanel(this.ms);
+		pol = new ListObjetPanel(this.ms); // test
+	
 		this.mv = pol.getVm();
 		pan.add(pol);
 		pan.setBounds(0, 30, 1024, 700);
 		this.ms.setPan(pan);
 		this.ms.getPan().repaint();
 		this.ms.revalidate();
+		
+		//this.z
 		System.out.println("LOAD BDD : fin");
 	}
 
@@ -514,6 +528,25 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Permet d'ecouter le JFloatSLider et de regler la lumiere
+	 */
+	@Override
+	public void stateChanged(ChangeEvent arg0) {
+		
+		System.out.println("Puissance lumiere initiale = " + vue.puissanceLumiere);
+		System.out.println("OK cowboy");
+		System.out.println("Value du slider : " + jfs.getFloatValue());
+		System.out.println("nom objet : " + vue.modelVolume.nom);
+		vue.puissanceLumiere =  (jfs.getFloatValue());
+		System.out.println("Puissance lumiere finale = " + vue.puissanceLumiere);
+		vue.revalidate();
+		ms.getPan().removeAll();
+		ms.getPan().add(vue);
+		vue.repaint();
+		
 	}
 
 }

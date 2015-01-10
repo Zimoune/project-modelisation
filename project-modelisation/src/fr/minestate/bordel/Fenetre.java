@@ -95,11 +95,13 @@ public class Fenetre extends JFrame {
 				vue.setBounds(0, 0, 1024, 700);
 				vue.suppMouvementListener();
 				vue.suppMouseWheel();
+				vm.vue = vue;
 				vue.setVolumeModel(vm);
 				vue.addMouseMotionListener(DeplacerVolume
 						.getMouseController(vm));
 				vue.addMouseWheelListener(DeplacerVolume
 						.getMouseWheelController(vm));
+				vue.addMouseListener(DeplacerVolume.getMouseListenerAmaury(vm));// test
 				vue.setVisible(true);
 				vue.setBackground(Color.gray);
 				this.menuBarre.setVue(vue);

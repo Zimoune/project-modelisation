@@ -38,7 +38,7 @@ public class ModelVolume extends Observable {
 	private Modification z;
 	public String chemin;
 	public String [] motsCles;
-	
+	public VueVolume vue;
 
 	public String[] getMotsCles() {
 		return motsCles;
@@ -61,6 +61,14 @@ public class ModelVolume extends Observable {
 	 */
 	public ModelVolume() {
 		volume = new HashSet<Face>();
+		
+		initVolume();
+	}
+	
+	// test
+	public ModelVolume(VueVolume vue) {
+		volume = new HashSet<Face>();
+		this.vue = vue;
 		initVolume();
 	}
 

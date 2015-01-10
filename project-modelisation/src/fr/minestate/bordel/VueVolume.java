@@ -27,7 +27,7 @@ public class VueVolume extends JPanel implements Observer {
 
 	public float puissanceLumiere = 1.25f;
 	
-	private ModelVolume modelVolume;
+	public ModelVolume modelVolume;
 
 	public boolean isFdf() {
 		return fdf;

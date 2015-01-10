@@ -1,23 +1,21 @@
 package fr.minestate.modif;
 
-import java.awt.Dimension;
+
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-
 import fr.minestate.bordel.ModelVolume;
 import fr.minestate.exception.IncompatibleSizeException;
-import fr.minestate.utils.Point;
 
 /**
  * Permet de controler un volume
  * 
  * @author scta
- *
+ * 
  */
 public class DeplacerVolume {
 
@@ -38,28 +36,38 @@ public class DeplacerVolume {
 	 */
 
 	public static MouseMotionListener getMouseController(final ModelVolume vol) {
+		// test
+
+		// fin test
 		return new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
+			
+				
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					vol.translation(Translation.X_AXIS, e.getX() - xSouris);
 					vol.translation(Translation.Y_AXIS, e.getY() - ySouris);
+
 					
+					if (vol.vue != null) {
+						vol.vue.setFdf(true); // test
+					}
+
 					if (xSouris >= l) {
 						System.out.println("On ne s'enfuit pas ! ");
 						vol.setTranslation(Translation.X_AXIS, 512);
 					}
-					
+
 					if (xSouris <= 0) {
 						System.out.println("Reviens-ici !");
 						vol.setTranslation(Translation.X_AXIS, 512);
 					}
-					
+
 					if (ySouris <= 0) {
 						System.out.println("On ne sort pas du cadre ! ");
 						vol.setTranslation(Translation.Y_AXIS, 350);
 					}
-					
+
 					if (ySouris >= h) {
 						System.out.println("On ne s'échappe pas ! ");
 						vol.setTranslation(Translation.Y_AXIS, 350);
@@ -74,8 +82,8 @@ public class DeplacerVolume {
 				if (SwingUtilities.isMiddleMouseButton(e)) {
 					try {
 						vol.rotation(new Matrice(new float[][] {
-								{ e.getX() - xSouris },
-								{ ySouris - e.getY() }, { 0 } }));
+								{ e.getX() - xSouris }, { ySouris - e.getY() },
+								{ 0 } }));
 					} catch (IncompatibleSizeException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -90,23 +98,67 @@ public class DeplacerVolume {
 			}
 
 			/**
-			 * Permet dimension'effectuer les actions associees aux mouvements de la
-			 * souris
+			 * Permet dimension'effectuer les actions associees aux mouvements
+			 * de la souris
 			 */
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				xSouris = e.getX();
 				ySouris = e.getY();
 			}
+
+		};
+	}
+
+	// test
+	public static MouseListener getMouseListenerAmaury(final ModelVolume vol) {
+		return new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				if (SwingUtilities.isLeftMouseButton(arg0)) {
+					if (vol.vue != null) {
+						vol.vue.setFdf(false);
+					}
+				}
+				
+
+			}
 		};
 	}
 
 	/**
 	 * Permet de renvoyer le MouseWheelListener associe a un VolumeModel
-	 * @param vol le VolumeModel dont on veut connaitre le MouseWheelListener
+	 * 
+	 * @param vol
+	 *            le VolumeModel dont on veut connaitre le MouseWheelListener
 	 * @return son MouseWheelListener
 	 */
-	public static MouseWheelListener getMouseWheelController(final ModelVolume vol) {
+	public static MouseWheelListener getMouseWheelController(
+			final ModelVolume vol) {
 		return new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
@@ -117,7 +169,9 @@ public class DeplacerVolume {
 
 	/**
 	 * Permet de changer le panel
-	 * @param panel le nouveau panel
+	 * 
+	 * @param panel
+	 *            le nouveau panel
 	 */
 	public static void setPanel(JComponent panel) {
 		DeplacerVolume.panel = panel;
@@ -125,20 +179,10 @@ public class DeplacerVolume {
 
 	/**
 	 * Permet de definir le meilleur zoom pour un VolumeModel
-	 * @param model le VolumeModel dont on veut connaitre le meilleur zoom possible
+	 * 
+	 * @param model
+	 *            le VolumeModel dont on veut connaitre le meilleur zoom
+	 *            possible
 	 */
-	/*
-	public static void optimalZoom(ModelVolume model) {
-		optimalZoom(model, panel.getSize());
-	}
 
-	/**
-	 * Permet de definir le meilleur zoom pour un VolumeModel selon des dimensions
-	 * @param model le VolumeModel dont on veut connaitre le meilleur zoom
-	 * @param dimension les dimensions
-	 */
-	/*
-	public static void optimalZoom(ModelVolume model, Dimension dimension) {
-		model.z(dimension);
-	}*/
 }

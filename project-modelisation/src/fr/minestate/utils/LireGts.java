@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import fr.minestate.bordel.ModelVolume;
 import fr.minestate.bordel.VolumeChangerModel;
 import fr.minestate.exception.FichierException;
@@ -22,6 +20,8 @@ import fr.minestate.figure.Face;
 public class LireGts {
 	public ModelVolume volume;
 	public VolumeChangerModel volumeModel;
+	private static BufferedReader buff;
+	
 
 	/**
 	 * Permet de definir un GtsParser selon un volumeModel
@@ -38,6 +38,7 @@ public class LireGts {
 	 * @throws FichierException 
 	 */
 	public static ModelVolume lireFichier(File selectedFile) throws FichierException {
+		boolean multiplicateur = false;
 		ModelVolume volume = new ModelVolume();
 		try {
 			FileReader fr = new FileReader(selectedFile);
@@ -48,10 +49,16 @@ public class LireGts {
 			ArrayList<Segment> listeSegments = new ArrayList<Segment>();
 			ArrayList<Face> listeTriangles = new ArrayList<Face>();
 			int nombre = Integer.parseInt(nombres[0]);
+			multiplicateur = testFichier(selectedFile);
 			for(int i = 0 ; i < nombre ; i++) {
 				s = buff.readLine();
 				String[] pts = s.split(" ");
-				listePoints.add(new Point(Float.parseFloat(pts[0]), Float.parseFloat(pts[1]), Float.parseFloat(pts[2])));
+				if(multiplicateur){
+				listePoints.add(new Point(Float.parseFloat(pts[0])*20, Float.parseFloat(pts[1])*20, Float.parseFloat(pts[2])*20));
+				}
+				else{
+					listePoints.add(new Point(Float.parseFloat(pts[0]), Float.parseFloat(pts[1]), Float.parseFloat(pts[2])));
+				}
 			}
 
 			nombre = Integer.parseInt(nombres[1]);
@@ -111,7 +118,38 @@ public class LireGts {
 
 		return volume;
 	}
-
+	
+	public static boolean testFichier(File selectedFile) throws IOException, FichierException {
+		boolean multiplicateur = false;
+		try {
+			FileReader  fr = new FileReader(selectedFile);
+			buff = new BufferedReader(fr);
+			String s = buff.readLine();
+			String[] nombres = s.split(" ");
+			int nombre = Integer.parseInt(nombres[0]);
+			for (int i = 0; i < nombre; i++) {
+				s = buff.readLine();
+				String[] pts = s.split(" ");
+				if (Float.parseFloat(pts[0]) < 0.001
+						&& Float.parseFloat(pts[0]) > 0
+						|| Float.parseFloat(pts[0]) > -0.001
+						&& Float.parseFloat(pts[0]) < 0 || multiplicateur) {
+					multiplicateur = true;
+				}
+			}
+		} catch (FileNotFoundException e) {
+			throw new FichierException("Fichier non trouvé !");
+		} catch (IOException e) {
+			throw new FichierException("Fichier incorrect !");
+		} catch(NumberFormatException e) {
+			throw new FichierException("Fichier incorrect !");
+		} catch(Exception e){
+			throw new FichierException("Fichier incorrect !");
+		}
+		return multiplicateur;
+	}
+	
+		
 
 
 

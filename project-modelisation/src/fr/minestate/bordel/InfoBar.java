@@ -2,11 +2,14 @@ package fr.minestate.bordel;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -19,28 +22,34 @@ import fr.minestate.bdd.Connexion;
  * 
  */
 
-public class InfoBar extends JPanel {
+public class InfoBar extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 
 	Fenetre fen;
-	JLabel labName; // le nom de l'objet
+	JLabel labName;
 	JLabel labLien;
 	JLabel affichage;
 	Connexion con = null;
 	private String name;
 	private String lien;
+	int nombreMotsCle;
 	Map<String, String> info = new HashMap<String, String>();
+	private JButton modifierInfos;
+	
 
 	public InfoBar(Fenetre fen, String name, String lien) {
 		this.fen = fen;
 		this.name = name;
 		this.lien = lien;
+		this.modifierInfos = new JButton ("Modifier Infos");
+		this.modifierInfos.addMouseListener(this);
 		System.out.println("InfoBar, name = " + this.name);
 		this.setBackground(Color.LIGHT_GRAY);
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		initCompo();
 		this.setVisible(true);
+		
 	}
 
 	private void initCompo() {
@@ -50,7 +59,10 @@ public class InfoBar extends JPanel {
 		String kwl = "Mots clés";
 		for(String s: kw){
 			kwl += "   "+s;
+			nombreMotsCle ++;
+
 		}
+		System.out.println("On a : "+ nombreMotsCle + " mots cles");
 		// pour le nom
 		labName = new JLabel();
 		labName.setText("Nom : " + name);
@@ -64,28 +76,62 @@ public class InfoBar extends JPanel {
 		affichage = new JLabel();
 		this.affichage.setText("Nom : " + name + "   Chemin : " + lien +"   "+kwl);
 		affichage.setPreferredSize(new Dimension(500, 30));
-		
-		/*
-		con = new Connexion();
-		info = con.getInfo(name);
-		con.closeConnexion();
-		*/
+
 		labLien.setText(info.get("lien"));
 		this.add(affichage);
-		//this.add(labName);
-		//this.add(labLien);
+		this.add(modifierInfos);
+
 	}
 	
 	public void setInfos (String nom, String chemin) {
 		con = new Connexion();
 		ArrayList<String> kw = con.getKeyWords(nom);
 		String kwl = "Mots clés";
+		nombreMotsCle = 0;
 		for(String s: kw){
 			System.out.println("mot cle: "+s);
 			kwl += "   "+s;
+			nombreMotsCle ++;
 		}
+		System.out.println("InfoBar, setInfos : nombreMotsCle = " + nombreMotsCle);
+		System.out.println();
+		
 		con.closeConnexion();
 		this.affichage.setText("Nom : " + nom + "   Chemin : " + chemin+"   "+kwl);
 		this.revalidate();
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		System.out.println("On clique sur Modifier Infos :-) ");
+		ModificationInfoPanel Milf = new ModificationInfoPanel (nombreMotsCle);
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
 }
