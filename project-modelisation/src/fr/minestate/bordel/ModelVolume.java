@@ -20,7 +20,7 @@ import fr.minestate.modif.Translation;
 import fr.minestate.utils.Point;
 
 /**
- * Permet de creer un VolumeModel pour manipuler un ensemble de triangle
+ * Permet de creer un ModelVolume pour manipuler un ensemble de triangle
  * 
  * @author scta
  *
@@ -32,40 +32,64 @@ public class ModelVolume extends Observable {
 	private Modification rotX;
 	public String nom;
 	private Modification rotY;
-	private Modification rotZ;	
+	private Modification rotZ;
 	private Modification trX;
 	private Modification trY;
 	private Modification z;
 	public String chemin;
-	public String [] motsCles;
+	public String[] motsCles;
 	public VueVolume vue;
 
+	/**
+	 * Retourne les mots cles associes a un ModelVolume
+	 * 
+	 * @return
+	 */
 	public String[] getMotsCles() {
 		return motsCles;
 	}
 
+	/**
+	 * Permet de changer les mots cles d'un ModelVolume
+	 * 
+	 * @param motsCles
+	 */
 	public void setMotsCles(String[] motsCles) {
 		this.motsCles = motsCles;
 	}
 
+	/**
+	 * Retourne le chemin d'un objet
+	 * 
+	 * @return
+	 */
 	public String getChemin() {
 		return chemin;
 	}
 
+	/**
+	 * Permet de changer le chemin d'un ModelVolume
+	 * 
+	 * @param chemin
+	 */
 	public void setChemin(String chemin) {
 		this.chemin = chemin;
 	}
 
 	/**
-	 * Initialise un VolumeModel
+	 * Initialise un ModelVolume
 	 */
 	public ModelVolume() {
 		volume = new HashSet<Face>();
-		
+
 		initVolume();
 	}
-	
-	// test
+
+	/**
+	 * Initialise un ModelVolume avec une VueVolume
+	 * 
+	 * @param vue
+	 */
 	public ModelVolume(VueVolume vue) {
 		volume = new HashSet<Face>();
 		this.vue = vue;
@@ -73,25 +97,20 @@ public class ModelVolume extends Observable {
 	}
 
 	/**
-	 * Initialise un VolumeModel avec une collection de triangle
+	 * Initialise un ModelVolume avec une collection de faces
 	 * 
 	 * @param col
-	 *            la collection de triangle
 	 */
+
 	public ModelVolume(Collection<Face> col) {
 		this(col, "Volume");
 	}
 
 	/**
 	 * Initialise un VolumeModel avec une collection de triangle et un nom
-	 * 
-	 * @param col
-	 *            la collection de triangle
-	 * @param nom
-	 *            le nom que l'on souhaite donner au VolumModel
 	 */
 	public ModelVolume(Collection<Face> c, String nom) {
-		this.motsCles = new String [5];
+		this.motsCles = new String[5];
 		this.nom = nom;
 		Iterator<Face> it = c.iterator();
 		while (it.hasNext()) {
@@ -109,15 +128,12 @@ public class ModelVolume extends Observable {
 		rotY = new Rotation(Rotation.Y_AXIS, 0);
 		rotZ = new Rotation(Rotation.Z_AXIS, 0);
 		z = new Homothetie(42);
-		trX = new Translation(Translation.X_AXIS, 1024/2);
-		trY = new Translation(Translation.Y_AXIS, 700/2);
+		trX = new Translation(Translation.X_AXIS, 1024 / 2);
+		trY = new Translation(Translation.Y_AXIS, 700 / 2);
 	}
 
 	/**
 	 * Permet d'ajouter un triangle au volumeModel
-	 * 
-	 * @param face
-	 *            le triangle a ajouter
 	 */
 	public void addFace(Face face) {
 		volume.add(face);
@@ -125,9 +141,6 @@ public class ModelVolume extends Observable {
 
 	/**
 	 * Permet d'ajouter une collection de triangle au volume
-	 * 
-	 * @param col
-	 *            la collection a ajouter au volume
 	 */
 	public void ajoutFaces(Collection<Face> c) {
 		Iterator<Face> it = c.iterator();
@@ -141,15 +154,16 @@ public class ModelVolume extends Observable {
 	 * Cette methode renvoie les triangles transformes
 	 * 
 	 * @return collection<triangle>
-	 * @throws IncompatibleSizeException 
+	 * @throws IncompatibleSizeException
 	 */
-	public Collection<Face> retourneListeTriangles() throws IncompatibleSizeException {
+	public Collection<Face> retourneListeTriangles()
+			throws IncompatibleSizeException {
 		Collection<Face> originals = volume;
 		List<Face> res = new ArrayList<Face>();
 		Matrice transformation = null;
 		try {
-			transformation = trX.add(trY)
-					.multiply(rotX).multiply(rotY).multiply(rotZ).multiply(z);
+			transformation = trX.add(trY).multiply(rotX).multiply(rotY)
+					.multiply(rotZ).multiply(z);
 		} catch (IncompatibleSizeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -167,7 +181,6 @@ public class ModelVolume extends Observable {
 	 * Permet de changer la translation
 	 * 
 	 * @param axis
-	 *            l'axe selon lequel on veut effectuer la translation
 	 * @param norm
 	 */
 
@@ -183,9 +196,8 @@ public class ModelVolume extends Observable {
 	 * Permet de modifier la rotation
 	 * 
 	 * @param axis
-	 *            l'axe selon lequel on veut modifier la rotation
 	 * @param angle
-	 *            l'angle de la rotation
+	 * 
 	 */
 
 	public void setRotation(int axis, int angle) {
@@ -196,19 +208,6 @@ public class ModelVolume extends Observable {
 		} else {
 			((Rotation) rotZ).setAngle(angle);
 		}
-	}
-
-	/**
-	 * Permet de modifier le z
-	 * 
-	 * @param factor
-	 *            le niveau de z
-	 */
-	
-	public void changerZoom(float factor) {
-		((Homothetie) z).setfacteur(factor);
-		setChanged();
-		notifyObservers();
 	}
 
 	/**
@@ -261,80 +260,14 @@ public class ModelVolume extends Observable {
 	}
 
 	/**
-	 * Permet de calculer le z optimal
+	 * Permet de retourner les points d'un ModelVolume
 	 * 
-	 * @param d
+	 * @return
 	 */
-	public void z(Dimension d) {
-		float[] volumeDim = null;
-		try {
-			volumeDim = getMaxDimensions();
-		} catch (IncompatibleSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		float mix = volumeDim[0];
-		float max = volumeDim[1];
-		float miy = volumeDim[2];
-		float may = volumeDim[3];
-		float xRatio = (d.width - 50) / (max - mix);
-		float yRatio = (d.height - 80) / (may - miy);
-		float ratio = Math.min(xRatio, yRatio);
-		changerZoom(ratio);
-		mix = mix * ratio;
-		miy = miy * ratio;
-		max = max * ratio;
-		may = may * ratio;
-		setTranslation(Translation.X_AXIS, (int) ((d.width + max + mix) / 2));
-		setTranslation(Translation.Y_AXIS,
-				(int) ((d.height - miy - may - 40) / 2));
-	}
-
-	/**
-	 * Permet d'obtenir les dimensions maximum
-	 * 
-	 * @return un tableau qui contient mix, max, miy, may
-	 * @throws IncompatibleSizeException 
-	 */
-	private float[] getMaxDimensions() throws IncompatibleSizeException {
-		float factor = ((Homothetie) z).getfacteur();
-		((Homothetie) z).setfacteur(1);
-		int xNorm = ((Translation) trX).getNorm();
-		((Translation) trX).setNorm(0);
-		int yNorm = ((Translation) trY).getNorm();
-		((Translation) trY).setNorm(0);
-
-		Float mix = null, max = null, miy = null, may = null;
-		for (Face face : retourneListeTriangles()) {
-			for (Point points : face.getCoords()) {
-				if (mix == null) {
-					mix = points.getX();
-					max = points.getX();
-					miy = points.getY();
-					may = points.getY();
-				}
-				if (points.getX() < mix)
-					mix = points.getX();
-				else if (points.getX() > max)
-					max = points.getX();
-				if (points.getY() < miy)
-					miy = points.getY();
-				else if (points.getY() > may)
-					may = points.getY();
-			}
-		}
-
-		((Homothetie) z).setfacteur(factor);
-		((Translation) trX).setNorm(xNorm);
-		((Translation) trY).setNorm(yNorm);
-		return new float[] { mix, max, miy, may };
-	}
-
 	public Point[] getTabPoints() {
 		Matrice m = null;
 		try {
-			m = rotZ.multiply(rotY).multiply(rotX)
-					.multiply(new Homothetie(20));
+			m = rotZ.multiply(rotY).multiply(rotX).multiply(new Homothetie(20));
 		} catch (IncompatibleSizeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -352,7 +285,7 @@ public class ModelVolume extends Observable {
 	/**
 	 * Retourne la base
 	 * 
-	 * @return la base (matrix)
+	 * @return
 	 */
 	private Matrice getBase() {
 		Matrice rotation = null;
@@ -377,10 +310,11 @@ public class ModelVolume extends Observable {
 	 * Permet d'executer une rotation selon une matrice
 	 * 
 	 * @param vector
-	 * @throws Exception 
-	 * @throws IncompatibleSizeException 
+	 * @throws Exception
+	 * @throws IncompatibleSizeException
 	 */
-	public void rotation(Matrice vector) throws IncompatibleSizeException, Exception {
+	public void rotation(Matrice vector) throws IncompatibleSizeException,
+			Exception {
 		Matrice vect = null;
 		try {
 			vect = getBase().inverse().multiply(vector);

@@ -1,18 +1,17 @@
+/**
+ * Permet de gerer l'ensemble des VolumeModel
+ *
+ */
 package fr.minestate.bordel;
 
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import fr.minestate.modif.DeplacerVolume;
 
-/**
- * Permet d'afficher un VolumeSet
- * JTabbedPane = permet d'avoir plusieurs onglets
- */
+
 public class VolumeSetVue extends JTabbedPane implements Observer, ChangeListener  {
 	private static final long serialVersionUID = 1L;
 
@@ -62,6 +61,9 @@ public class VolumeSetVue extends JTabbedPane implements Observer, ChangeListene
 
 
 	
+	/**
+	 * Permet de changer le volume actuel
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		volumeSetModel.setCurrentVolume(((VolumeSetVue)e.getSource()).getSelectedIndex());

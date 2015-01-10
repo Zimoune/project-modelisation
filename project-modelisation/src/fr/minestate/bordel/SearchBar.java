@@ -1,3 +1,6 @@
+/**
+ * Classe permettant de creer une barre de recherche d'objets dans la BDD
+ */
 package fr.minestate.bordel;
 
 import java.awt.BorderLayout;
@@ -33,6 +36,10 @@ public class SearchBar extends JPanel implements KeyListener,
 	DefaultListModel<String> model = new DefaultListModel<String>();
 	Fenetre fen;
 
+	/**
+	 * Permet de creer une SearchBar avec une fenetre
+	 * @param fen
+	 */
 	public SearchBar(Fenetre fen) {
 		this.fen = fen;
 		this.setVisible(true);
@@ -41,6 +48,9 @@ public class SearchBar extends JPanel implements KeyListener,
 		initCompo();
 	}
 
+	/**
+	 * Initialise la SearchBar
+	 */
 	private void initCompo() {
 		jtf = new JTextField();
 		jtf.addKeyListener(this);
@@ -71,6 +81,9 @@ public class SearchBar extends JPanel implements KeyListener,
 
 	}
 
+	/**
+	 * Met a jour la SearchBar en fonction des entrees clavier
+	 */
 	private void update() {
 		con = new Connexion();
 		this.listObject.clear();
@@ -80,6 +93,9 @@ public class SearchBar extends JPanel implements KeyListener,
 		con.closeConnexion();
 	}
 
+	/**
+	 * Affiche les objets de la SearchBar
+	 */
 	private void getListObjet() {
 		String[] list = new String[listObject.size()];
 		Set<String> set = listObject.keySet();
@@ -99,6 +115,9 @@ public class SearchBar extends JPanel implements KeyListener,
 		}
 	}
 
+	/**
+	 * Gere les changements d'action dans la SearchBar
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
 	

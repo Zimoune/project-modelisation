@@ -16,10 +16,8 @@ import javax.swing.JPanel;
 import fr.minestate.bdd.Connexion;
 
 /**
- * Cette classe permet d'afficher une barre d'informations sur l'objet : attention se met pas a jour quand on load 1 objet ds la bdd
- * 
- * @author dumetza
- * 
+ * Cette classe permet d'afficher une barre d'informations sur l'objet
+ * @author scta
  */
 
 public class InfoBar extends JPanel implements MouseListener {
@@ -38,6 +36,12 @@ public class InfoBar extends JPanel implements MouseListener {
 	private JButton modifierInfos;
 	
 
+	/**
+	 * Contructeur de InfoBar : permet de creer une InfoBar
+	 * @param fen
+	 * @param name
+	 * @param lien
+	 */
 	public InfoBar(Fenetre fen, String name, String lien) {
 		this.fen = fen;
 		this.name = name;
@@ -52,6 +56,9 @@ public class InfoBar extends JPanel implements MouseListener {
 		
 	}
 
+	/**
+	 * Permet d'initialiser une InfoBar
+	 */
 	private void initCompo() {
 		con = new Connexion();
 		ArrayList<String> kw = con.getKeyWords(name);
@@ -83,6 +90,11 @@ public class InfoBar extends JPanel implements MouseListener {
 
 	}
 	
+	/**
+	 * Permet de changer les informations affichees sur l'InfoBar
+	 * @param nom
+	 * @param chemin
+	 */
 	public void setInfos (String nom, String chemin) {
 		con = new Connexion();
 		ArrayList<String> kw = con.getKeyWords(nom);
@@ -101,6 +113,9 @@ public class InfoBar extends JPanel implements MouseListener {
 		this.revalidate();
 	}
 
+	/**
+	 * Permet de definir l'action a realiser quand on clique
+	 */
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		System.out.println("On clique sur Modifier Infos :-) ");

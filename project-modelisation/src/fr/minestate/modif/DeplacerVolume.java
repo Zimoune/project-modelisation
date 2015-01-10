@@ -1,12 +1,10 @@
 package fr.minestate.modif;
 
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import fr.minestate.bordel.ModelVolume;
 import fr.minestate.exception.IncompatibleSizeException;
@@ -23,32 +21,28 @@ public class DeplacerVolume {
 	public static int ySouris;
 	private static int l = 1024;
 	private static int h = 700;
-	private static JComponent panel;
-	@SuppressWarnings("unused")
-	private static ModelVolume model;
 
+
+	
+	
 	/**
-	 * Retourne le MouseMotionListener associe a un VolumeModel
-	 * 
+	 * Permet de controler l'objet avec la souris (au niveau des deplacements + met l'objet en fil de fer)
 	 * @param vol
-	 *            le VolumeModel dont on veut recuperer le MouseMotionListener
-	 * @return son MouseMotionListener
+	 * @return
 	 */
-
 	public static MouseMotionListener getMouseController(final ModelVolume vol) {
-		// test
 
-		// fin test
 		return new MouseMotionListener() {
+			/**
+			 * Permet de deplacer l'objet en maintenant enfoncé le clic gauche
+			 */
 			@Override
 			public void mouseDragged(MouseEvent e) {
-			
-				
+
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					vol.translation(Translation.X_AXIS, e.getX() - xSouris);
 					vol.translation(Translation.Y_AXIS, e.getY() - ySouris);
 
-					
 					if (vol.vue != null) {
 						vol.vue.setFdf(true); // test
 					}
@@ -97,9 +91,9 @@ public class DeplacerVolume {
 				ySouris = e.getY();
 			}
 
+			
 			/**
-			 * Permet dimension'effectuer les actions associees aux mouvements
-			 * de la souris
+			 * Permet de gerer les deplacements de la souris
 			 */
 			@Override
 			public void mouseMoved(MouseEvent e) {
@@ -110,7 +104,11 @@ public class DeplacerVolume {
 		};
 	}
 
-	// test
+	/**
+	 * Ce listener permet de controler l'objet avec la souris
+	 * @param vol
+	 * @return
+	 */
 	public static MouseListener getMouseListenerAmaury(final ModelVolume vol) {
 		return new MouseListener() {
 
@@ -137,6 +135,9 @@ public class DeplacerVolume {
 
 			}
 
+			/**
+			 * Permet d'enlever le mode fil de fer de l'objet quand on le lache avec la souris
+			 */
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				if (SwingUtilities.isLeftMouseButton(arg0)) {
@@ -144,7 +145,6 @@ public class DeplacerVolume {
 						vol.vue.setFdf(false);
 					}
 				}
-				
 
 			}
 		};
@@ -154,7 +154,6 @@ public class DeplacerVolume {
 	 * Permet de renvoyer le MouseWheelListener associe a un VolumeModel
 	 * 
 	 * @param vol
-	 *            le VolumeModel dont on veut connaitre le MouseWheelListener
 	 * @return son MouseWheelListener
 	 */
 	public static MouseWheelListener getMouseWheelController(
@@ -167,22 +166,6 @@ public class DeplacerVolume {
 		};
 	}
 
-	/**
-	 * Permet de changer le panel
-	 * 
-	 * @param panel
-	 *            le nouveau panel
-	 */
-	public static void setPanel(JComponent panel) {
-		DeplacerVolume.panel = panel;
-	}
 
-	/**
-	 * Permet de definir le meilleur zoom pour un VolumeModel
-	 * 
-	 * @param model
-	 *            le VolumeModel dont on veut connaitre le meilleur zoom
-	 *            possible
-	 */
 
 }

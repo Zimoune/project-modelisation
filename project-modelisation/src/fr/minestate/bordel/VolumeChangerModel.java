@@ -1,15 +1,15 @@
+/**
+ * Permet de definir une Liste de VolumeModel
+ * @author scta
+ *
+ */
 package fr.minestate.bordel;
 
 import java.util.ArrayList;
 import java.util.Observable;
 
-import fr.minestate.modif.DeplacerVolume;
 
-/**
- * Permet de definir un SET de VolumeModel
- * @author scta
- *
- */
+
 public class VolumeChangerModel extends Observable {
 
 	private ArrayList<ModelVolume> volumes;
@@ -89,7 +89,6 @@ public class VolumeChangerModel extends Observable {
 	public void addVolume(ModelVolume volume) {
 		this.volumes.add(volume);
 		setCurrentVolume(volumes.size() - 1);
-	//	DeplacerVolume.optimalZoom(volume);
 		notifyObservers();
 	}
 

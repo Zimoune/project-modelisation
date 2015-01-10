@@ -1,3 +1,6 @@
+/**
+ * A continuer ... ?
+ */
 package fr.minestate.ihm;
 
 import java.awt.Color;

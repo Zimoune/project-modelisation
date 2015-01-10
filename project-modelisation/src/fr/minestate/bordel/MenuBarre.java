@@ -13,6 +13,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -32,7 +33,6 @@ import fr.minestate.utils.LireGts;
 
 /**
  * Permet de definir la barre de menu en haut de l'ecran
- * 
  * @author scta
  * 
  */
@@ -76,9 +76,18 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 	private JMenuItem motsCles;
 	public ListObjetPanel lop2 = null;
 	
+	
+	private JButton raz;
+	
 	boolean loadBdd = false;
 	boolean load = false;
 
+	/**
+	 * Permet de creer une MenuBarre
+	 * @param volumeSetModel
+	 * @param ms
+	 * @param affichage
+	 */
 	public MenuBarre(VolumeChangerModel volumeSetModel, Fenetre ms,
 			boolean affichage) {
 		if (affichage) {
@@ -101,7 +110,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 
 		file = new JMenu("File");
 		edit = new JMenu("Edit");
-		infos = new JMenu("Infos");
+		infos = new JMenu("Informations");
 
 		infosObjet = new JMenuItem("Infos Objet");
 		infosObjet.addActionListener(this);
@@ -147,12 +156,16 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 		add(file);
 		add(edit);
 		add(infos);
+		
+
 		this.setBackground(new Color(27, 126, 179));
 		
 		// Controleur de puissance lumineuse
 		jfs = new JFloatSlider (0,0.0f, 2.5f, 1.25f, 0.5f);
 		jfs.addChangeListener(this);
 		this.add(jfs);
+		
+	
 		
 	}
 
@@ -332,24 +345,11 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 		}
 
 	}
-	
-	private void recharger() {
 
-		if (mv == null) {
-			System.out.println("mv est null");
-			return;
-		}
-		mv.initVolume();
-		this.ms.repaint();
-
-	}
-
-	/*
-	 * public ModelVolume getMv() { return mv; }
-	 * 
-	 * public void setMv(ModelVolume mv) { this.mv = mv; }
+	/**
+	 * Permet d'activer / desactiver le mode fil de fer
+	 * @param mv
 	 */
-
 	private void setFilDeFer(ModelVolume mv) {
 
 		if (mv != null) {
@@ -369,14 +369,26 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 		return;
 	}
 
+	/**
+	 * Retourne le VueVolume de la MenuBarre
+	 * @return
+	 */
 	public VueVolume getVue() {
 		return vue;
 	}
 
+	/**
+	 * Permet de changer le VueVolume de la MenuBarre
+	 * @param vue
+	 */
 	public void setVue(VueVolume vue) {
 		this.vue = vue;
 	}
 
+	/**
+	 * Permet de charger un fichier depuis l'ordinateur
+	 * @throws FichierException
+	 */
 	private void load() throws FichierException {
 		load = true;
 		loadBdd = false;
@@ -432,6 +444,9 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 
 	}
 
+	/**
+	 * Permet de charger un fichier depuis la BDD
+	 */
 	private void loadFromBdd() {
 		loadBdd = true;
 		load = false;
@@ -442,7 +457,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 		pan.setLayout(null);
 		pol = new ListObjetPanel(this.ms); // test
 	
-		this.mv = pol.getVm();
+		this.mv = pol.getMv();
 		pan.add(pol);
 		pan.setBounds(0, 30, 1024, 700);
 		this.ms.setPan(pan);
@@ -453,6 +468,9 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 		System.out.println("LOAD BDD : fin");
 	}
 
+	/**
+	 * Permet de sauvegarder un fichier depuis le PC dans la BDD
+	 */
 	private void sauvegarder() {
 		try{
 			

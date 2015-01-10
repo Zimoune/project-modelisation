@@ -2,6 +2,7 @@ package fr.minestate.modif;
 
 /**
  * Permet de creer une translation
+ * 
  * @author scta
  *
  */
@@ -16,7 +17,9 @@ public class Translation extends Modification {
 
 	/**
 	 * Permet de definir une translation
-	 * @param matrix la matrice selon laquelle on definit la translation
+	 * 
+	 * @param matrix
+	 *            la matrice selon laquelle on definit la translation
 	 */
 	public Translation(float[][] matrix) {
 		super(matrix);
@@ -25,7 +28,9 @@ public class Translation extends Modification {
 
 	/**
 	 * Permet de definir une translation
-	 * @param axis l'axe de la translation
+	 * 
+	 * @param axis
+	 *            l'axe de la translation
 	 * @param norm
 	 */
 	public Translation(int axis, int norm) {
@@ -34,14 +39,14 @@ public class Translation extends Modification {
 		this.setNorm(norm);
 	}
 
-	
 	public void setNorm(int norm) {
 		this.norm = norm;
 		updateMatrix();
 	}
-	
+
 	/**
 	 * Permet de renvoyer la norme
+	 * 
 	 * @return la norme
 	 */
 	public int getNorm() {
@@ -55,24 +60,22 @@ public class Translation extends Modification {
 	protected void updateMatrix() {
 		float x = 0;
 		float y = 0;
-		
+
 		if (axis == X_AXIS) {
 			x = norm;
 		} else {
 			y = norm;
 		}
-		
-		
-		this.elem = new float[][] {
-									{1f, 0, 0, x},
-									{0, 1, 0, y},
-									{0, 0, 1, 0},
-									{0, 0, 0, 1}};
+
+		this.elem = new float[][] { { 1f, 0, 0, x }, { 0, 1, 0, y },
+				{ 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
 	}
 
 	/**
 	 * Permet d'ajouter une norme
-	 * @param norm la norme a ajouter
+	 * 
+	 * @param norm
+	 *            la norme a ajouter
 	 */
 	public void addNorm(int norm) {
 		setNorm(this.norm + norm);

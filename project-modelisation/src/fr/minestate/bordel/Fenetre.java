@@ -15,9 +15,7 @@ import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.LireGts;
 
 /**
- * Permet de definir la fenetre principale d'affichage. On définit la figure à
- * afficher des le lancement par un cube.
- * 
+ * Permet de definir la fenetre principale d'affichage.
  * @author scta
  */
 public class Fenetre extends JFrame {
@@ -31,10 +29,18 @@ public class Fenetre extends JFrame {
 	public InfoBar info; // rajout
 	
 
+	/**
+	 * Retourne la menuBarre associee a la fenetre
+	 * @return
+	 */
 	public MenuBarre getmenuBarre() {
 		return menuBarre;
 	}
 
+	/**
+	 * Permet de changer la menuBare associee a la fenetre
+	 * @param menuBarre
+	 */
 	public void setmenuBarre(MenuBarre menuBarre) {
 		this.menuBarre = menuBarre;
 	}

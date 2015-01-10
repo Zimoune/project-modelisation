@@ -28,16 +28,29 @@ public class VueVolume extends JPanel implements Observer {
 	public float puissanceLumiere = 1.25f;
 	
 	public ModelVolume modelVolume;
-
+	
+	/**
+	 * Permet de savoir si le mode fil de fer est active ou non
+	 * @return
+	 */
 	public boolean isFdf() {
 		return fdf;
 	}
+	
+	/**
+	 * Initialise une VueVolume avec un modele (le modele a afficher)
+	 * @param v
+	 */
 	public VueVolume(ModelVolume v) {
 		add(new JLabel(v.getName()));
 		this.modelVolume = v;
 		this.modelVolume.addObserver(this);
 	}
 
+	/**
+	 * Permet d'activer ou desactiver le mode fil de fer
+	 * @param fdf
+	 */
 	public void setFdf(boolean fdf) {
 		this.fdf = fdf;
 	}
@@ -136,7 +149,11 @@ public class VueVolume extends JPanel implements Observer {
 		g.fillPolygon(p);
 	}
 
-	
+	/**
+	 * Permet de dessiner les normales aux faces : on l'utilise pas toujours
+	 * @param t
+	 * @param g
+	 */
 	private void dessineNormaleAuFace(Face t, Graphics g) {
 		Point[] points = t.getCoords();
 		Vecteur normal = new Vecteur();
@@ -146,6 +163,11 @@ public class VueVolume extends JPanel implements Observer {
 	}
 	
 	
+	/**
+	 * Dessine une face en fil de fer
+	 * @param t
+	 * @param g
+	 */
 	private void dessineTriangleFilDeFer(Face t, Graphics g){
 		Point[] points = t.getCoords();
 		Polygon p = new Polygon();
@@ -156,7 +178,7 @@ public class VueVolume extends JPanel implements Observer {
 	}
 
 	/**
-	 * Permet de mettre a jour
+	 * Permet de mettre a jour la VueVolume
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
