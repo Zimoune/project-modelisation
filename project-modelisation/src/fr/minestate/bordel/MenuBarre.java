@@ -33,10 +33,12 @@ import fr.minestate.utils.LireGts;
 
 /**
  * Permet de definir la barre de menu en haut de l'ecran
+ * 
  * @author scta
  * 
  */
-public class MenuBarre extends JMenuBar implements Observer, ActionListener, ChangeListener {
+public class MenuBarre extends JMenuBar implements Observer, ActionListener,
+		ChangeListener {
 	private VolumeChangerModel volumeSetModel;
 	private Fenetre ms;
 	public VueVolume vue;
@@ -64,7 +66,6 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 	private JMenuItem exit;
 	private JMenuItem openBdd;
 
-
 	/*
 	 * Items du menu edit
 	 */
@@ -75,15 +76,17 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 	private JMenuItem infosObjet;
 	private JMenuItem motsCles;
 	public ListObjetPanel lop2 = null;
-	
-	
+
+	private JMenuItem normales;
+
 	private JButton raz;
-	
+
 	boolean loadBdd = false;
 	boolean load = false;
 
 	/**
 	 * Permet de creer une MenuBarre
+	 * 
 	 * @param volumeSetModel
 	 * @param ms
 	 * @param affichage
@@ -136,9 +139,13 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 
 		reload = new JMenuItem("Default location");
 		reload.addActionListener(this);
-		
-		motsCles = new JMenuItem ("Mots clefs");
+
+		motsCles = new JMenuItem("Mots clefs");
 		motsCles.addActionListener(this);
+
+		normales = new JMenuItem("Normales");
+		normales.addActionListener(this);
+		edit.add(normales);
 
 		file.add(save);
 		file.add(open);
@@ -156,17 +163,14 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 		add(file);
 		add(edit);
 		add(infos);
-		
 
 		this.setBackground(new Color(27, 126, 179));
-		
+
 		// Controleur de puissance lumineuse
-		jfs = new JFloatSlider (0,0.0f, 2.5f, 1.25f, 0.5f);
+		jfs = new JFloatSlider(0, 0.0f, 2.5f, 1.25f, 0.5f);
 		jfs.addChangeListener(this);
 		this.add(jfs);
-		
-	
-		
+
 	}
 
 	/**
@@ -209,10 +213,10 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 		}
 		if (arg0.getSource() == this.addLumiere) {
 			vue.puissanceLumiere += 0.1;
-			 vue.revalidate();
-			 ms.getPan().removeAll();
-			 ms.getPan().add(vue);
-			 vue.repaint();
+			vue.revalidate();
+			ms.getPan().removeAll();
+			ms.getPan().add(vue);
+			vue.repaint();
 		}
 		if (arg0.getSource() == this.delLumiere) {
 			vue.puissanceLumiere -= 0.1;
@@ -221,13 +225,12 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 			ms.getPan().add(vue);
 			vue.repaint();
 		}
-		
-		if(arg0.getSource() == this.motsCles) {
+
+		if (arg0.getSource() == this.motsCles) {
 			System.out.println("On va afficher les mots cles de l'objet");
 			ModificationPanel mb = new ModificationPanel(this.ms);
 		}
-		
-		
+
 		if (arg0.getSource() == this.infosObjet) {
 
 			/*
@@ -344,10 +347,80 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 
 		}
 
+		// active ou desactive l'affichage des normales aux faces
+		if (arg0.getSource() == this.normales) {
+
+			if (loadBdd == true) {
+
+				System.out.println("Normales : load bdd  =true");
+				this.mv = pol.vm;
+				JPanel pan = this.ms.getPan();
+
+				vue.setBounds(0, 0, 1024, 700);
+				vue.suppMouvementListener();
+				vue.suppMouseWheel();
+				vue.setVolumeModel(this.mv);
+				vue.addMouseMotionListener(DeplacerVolume
+						.getMouseController(this.mv));
+				vue.addMouseWheelListener(DeplacerVolume
+						.getMouseWheelController(this.mv));
+
+				vue.setVisible(true);
+				vue.setBackground(Color.gray);
+				pan.setBounds(0, 30, 1024, 700);
+				pan.setLayout(null);
+				vue.revalidate();
+				pan.removeAll();
+				pan.add(vue);
+
+				System.out.println("fdf : Load Bdd = true");
+				this.mv = pol.vm;
+				this.setNormales(this.mv);
+			}
+			if (load == true) {
+				System.out.println("normales: Load = true");
+				this.setNormales(mv);
+			}
+
+			if (!loadBdd && !load) {
+				System.out.println("normales: Par defaut");
+				this.mv = ms.vm;
+				this.setNormales(mv);
+			}
+
+			this.ms.getPan().repaint();
+			this.ms.revalidate();
+
+		}
+
+	}
+
+	/**
+	 * Active ou desactive l'affichage des normales aux face d'un ModelVolume
+	 * @param mv
+	 */
+	public void setNormales(ModelVolume mv) {
+		if (mv != null) {
+			if (this.vue.isNormales()) {
+				System.out.println("On enleve les normales!");
+				this.vue.setNormales(false);
+			}
+
+			else {
+				System.out.println("On met les normales");
+				this.vue.setNormales(true);
+				this.ms.repaint();
+			}
+
+		} else
+			System.out.println("normales:  MV est nul");
+		return;
+
 	}
 
 	/**
 	 * Permet d'activer / desactiver le mode fil de fer
+	 * 
 	 * @param mv
 	 */
 	private void setFilDeFer(ModelVolume mv) {
@@ -371,6 +444,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 
 	/**
 	 * Retourne le VueVolume de la MenuBarre
+	 * 
 	 * @return
 	 */
 	public VueVolume getVue() {
@@ -379,6 +453,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 
 	/**
 	 * Permet de changer le VueVolume de la MenuBarre
+	 * 
 	 * @param vue
 	 */
 	public void setVue(VueVolume vue) {
@@ -387,6 +462,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 
 	/**
 	 * Permet de charger un fichier depuis l'ordinateur
+	 * 
 	 * @throws FichierException
 	 */
 	private void load() throws FichierException {
@@ -456,15 +532,15 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 		pan.removeAll();
 		pan.setLayout(null);
 		pol = new ListObjetPanel(this.ms); // test
-	
+
 		this.mv = pol.getMv();
 		pan.add(pol);
 		pan.setBounds(0, 30, 1024, 700);
 		this.ms.setPan(pan);
 		this.ms.getPan().repaint();
 		this.ms.revalidate();
-		
-		//this.z
+
+		// this.z
 		System.out.println("LOAD BDD : fin");
 	}
 
@@ -472,8 +548,8 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 	 * Permet de sauvegarder un fichier depuis le PC dans la BDD
 	 */
 	private void sauvegarder() {
-		try{
-			
+		try {
+
 			FiltreSimple gts = new FiltreSimple("Fichiers GTS", ".gts");
 			JFileChooser jf = new JFileChooser();
 			boolean estGts = false;
@@ -481,7 +557,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 			jf.showOpenDialog(null);
 			// Récupération du fichier
 			File fichier = jf.getSelectedFile();
-			
+
 			if (fichier == null)
 				return;
 			String extension = fichier.getName().substring(
@@ -498,10 +574,9 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 				LireGts.lireFichier(fichier);
 				copyFile(fichier);
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 
 	}
 
@@ -553,18 +628,20 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener, Cha
 	 */
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
-		
-		System.out.println("Puissance lumiere initiale = " + vue.puissanceLumiere);
+
+		System.out.println("Puissance lumiere initiale = "
+				+ vue.puissanceLumiere);
 		System.out.println("OK cowboy");
 		System.out.println("Value du slider : " + jfs.getFloatValue());
 		System.out.println("nom objet : " + vue.modelVolume.nom);
-		vue.puissanceLumiere =  (jfs.getFloatValue());
-		System.out.println("Puissance lumiere finale = " + vue.puissanceLumiere);
+		vue.puissanceLumiere = (jfs.getFloatValue());
+		System.out
+				.println("Puissance lumiere finale = " + vue.puissanceLumiere);
 		vue.revalidate();
 		ms.getPan().removeAll();
 		ms.getPan().add(vue);
 		vue.repaint();
-		
+
 	}
 
 }

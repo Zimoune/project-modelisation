@@ -56,6 +56,18 @@ public class VueVolume extends JPanel implements Observer {
 	}
 
 	private boolean fdf;
+	private boolean normales;
+	
+
+
+	public boolean isNormales() {
+		return normales;
+	}
+
+	public void setNormales (boolean normales) {
+		this.normales = normales;
+	}
+	
 
 	/**
 	 * Permet d'initialser un VolumeView sans parametre
@@ -101,6 +113,12 @@ public class VueVolume extends JPanel implements Observer {
 		if(fdf)
 			for (Face t : triangles) 
 				dessineTriangleFilDeFer(t, g);
+		
+		else if (normales)
+			for (Face t : triangles) {
+				this.dessineTriangle(t, g);
+				this.dessineNormaleAuFace(t, g);
+			}
 		else
 			for (Face t : triangles) 
 				dessineTriangle(t, g);
@@ -154,7 +172,7 @@ public class VueVolume extends JPanel implements Observer {
 	 * @param t
 	 * @param g
 	 */
-	private void dessineNormaleAuFace(Face t, Graphics g) {
+	public void dessineNormaleAuFace(Face t, Graphics g) {
 		Point[] points = t.getCoords();
 		Vecteur normal = new Vecteur();
 		normal = normal.normale(points);
