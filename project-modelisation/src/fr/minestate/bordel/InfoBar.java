@@ -86,6 +86,7 @@ public class InfoBar extends JPanel implements MouseListener {
 
 		labLien.setText(info.get("lien"));
 		this.add(affichage);
+		if(!this.name.equals(this.fen.getDefaultObjet()))
 		this.add(supprimerObjet);
 
 	}
@@ -96,6 +97,17 @@ public class InfoBar extends JPanel implements MouseListener {
 	 * @param chemin
 	 */
 	public void setInfos (String nom, String chemin) {
+		System.out.println(nom + " / " + this.fen.getDefaultObjet());
+		if(nom.equals(this.fen.getDefaultObjet())){
+			this.remove(this.supprimerObjet);
+			this.repaint();
+		}
+		else{
+			if(!this.isAncestorOf(this.supprimerObjet))
+				this.add(this.supprimerObjet);
+			this.repaint();
+		}
+			
 		con = new Connexion();
 		ArrayList<String> kw = con.getKeyWords(nom);
 		String kwl = "Mots clés";

@@ -27,6 +27,7 @@ public class Fenetre extends JFrame {
 	public ModelVolume vm = null;
 	private SearchBar searchBar = new SearchBar(this);
 	public InfoBar info; // rajout
+	private String defaultObjet = "cube";
 	
 
 	/**
@@ -54,7 +55,7 @@ public class Fenetre extends JFrame {
 		Connexion con = new Connexion();
 		Map<String, String> listObjet = con.getListObjet();
 		System.out.println("Taille listObjet = " + listObjet.size());
-		String chemin1erObjet = listObjet.get("goblet");
+		String chemin1erObjet = listObjet.get(this.defaultObjet);
 
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -162,5 +163,13 @@ public class Fenetre extends JFrame {
 	 */
 	public void setPan(JPanel panel) {
 		this.panel = panel;
+	}
+
+	public String getDefaultObjet() {
+		return defaultObjet;
+	}
+
+	public void setDefaultObjet(String defaultObjet) {
+		this.defaultObjet = defaultObjet;
 	}
 }
