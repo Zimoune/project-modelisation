@@ -54,7 +54,7 @@ public class Fenetre extends JFrame {
 		Connexion con = new Connexion();
 		Map<String, String> listObjet = con.getListObjet();
 		System.out.println("Taille listObjet = " + listObjet.size());
-		String chemin1erObjet = listObjet.get("cube");
+		String chemin1erObjet = listObjet.get("goblet");
 
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -146,6 +146,14 @@ public class Fenetre extends JFrame {
 		return this.panel;
 	}
 
+	/**
+	 * Retourne la searchBar
+	 * @return
+	 */
+	public SearchBar getSearchBar(){
+		return this.searchBar;
+	}
+	
 	/**
 	 * Permet de changer le panel de la fenetre
 	 * 

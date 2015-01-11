@@ -1,6 +1,7 @@
 package fr.minestate.bordel; 
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.event.MouseMotionListener;

@@ -84,7 +84,7 @@ public class SearchBar extends JPanel implements KeyListener,
 	/**
 	 * Met a jour la SearchBar en fonction des entrees clavier
 	 */
-	private void update() {
+	public void update() {
 		con = new Connexion();
 		this.listObject.clear();
 		this.listObject = con.getObjectsByLike(this.jtf.getText());

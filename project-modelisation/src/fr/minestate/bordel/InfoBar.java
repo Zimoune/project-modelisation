@@ -33,7 +33,7 @@ public class InfoBar extends JPanel implements MouseListener {
 	private String lien;
 	int nombreMotsCle;
 	Map<String, String> info = new HashMap<String, String>();
-	private JButton modifierInfos;
+	private JButton supprimerObjet;
 	
 
 	/**
@@ -46,8 +46,8 @@ public class InfoBar extends JPanel implements MouseListener {
 		this.fen = fen;
 		this.name = name;
 		this.lien = lien;
-		this.modifierInfos = new JButton ("Modifier Infos");
-		this.modifierInfos.addMouseListener(this);
+		this.supprimerObjet = new JButton ("Supprimer objet");
+		this.supprimerObjet.addMouseListener(this);
 		System.out.println("InfoBar, name = " + this.name);
 		this.setBackground(Color.LIGHT_GRAY);
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
@@ -86,7 +86,7 @@ public class InfoBar extends JPanel implements MouseListener {
 
 		labLien.setText(info.get("lien"));
 		this.add(affichage);
-		this.add(modifierInfos);
+		this.add(supprimerObjet);
 
 	}
 	
@@ -118,8 +118,12 @@ public class InfoBar extends JPanel implements MouseListener {
 	 */
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		System.out.println("On clique sur Modifier Infos :-) ");
-		ModificationInfoPanel Milf = new ModificationInfoPanel (nombreMotsCle);
+		if(arg0.getSource() == this.supprimerObjet){
+			this.con = new Connexion();
+			con.supprimerObjet(name);
+			con.closeConnexion();
+			this.fen.getSearchBar().update();
+		}
 		
 	}
 

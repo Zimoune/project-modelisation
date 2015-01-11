@@ -54,7 +54,6 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	 */
 	private JMenu file;
 	private JMenu edit;
-	private JMenu infos;
 
 	private static final long serialVersionUID = 1L;
 
@@ -64,7 +63,6 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	private JMenuItem save;
 	private JMenuItem open;
 	private JMenuItem exit;
-	private JMenuItem openBdd;
 
 	/*
 	 * Items du menu edit
@@ -73,13 +71,10 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	private JMenuItem delLumiere;
 	private JMenuItem reload;
 	private JMenuItem filDeFer;
-	private JMenuItem infosObjet;
 	private JMenuItem motsCles;
 	public ListObjetPanel lop2 = null;
 
 	private JMenuItem normales;
-
-	private JButton raz;
 
 	boolean loadBdd = false;
 	boolean load = false;
@@ -113,17 +108,13 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 
 		file = new JMenu("File");
 		edit = new JMenu("Edit");
-		infos = new JMenu("Informations");
 
-		infosObjet = new JMenuItem("Infos Objet");
-		infosObjet.addActionListener(this);
+
 
 		save = new JMenuItem("Save");
 		save.addActionListener(this);
 		open = new JMenuItem("Open");
 		open.addActionListener(this);
-		openBdd = new JMenuItem("Load BDD");
-		openBdd.addActionListener(this);
 
 		exit = new JMenuItem("Exit");
 		exit.addActionListener(this);
@@ -149,7 +140,6 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 
 		file.add(save);
 		file.add(open);
-		file.add(openBdd);
 		file.add(exit);
 
 		edit.add(addLumiere);
@@ -158,11 +148,9 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 		edit.add(filDeFer);
 		edit.add(motsCles);
 
-		infos.add(infosObjet);
 
 		add(file);
 		add(edit);
-		add(infos);
 
 		this.setBackground(new Color(27, 126, 179));
 
@@ -172,7 +160,6 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 		this.add(jfs);
 
 	}
-
 	/**
 	 * Permet de change de VolumeSetModel
 	 * 
@@ -195,7 +182,12 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	public void actionPerformed(ActionEvent arg0) {
 		// Si on clique sur le bouton save
 		if (arg0.getSource() == this.save) {
-			sauvegarder();
+			try {
+				sauvegarder();
+			} catch (FichierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		// Si on clique sur le bouton open
 		if (arg0.getSource() == this.open) {
@@ -207,10 +199,6 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 			}
 		}
 		// Si on clique sur le bouton ouvrir bdd
-		if (arg0.getSource() == this.openBdd) {
-			loadFromBdd();
-
-		}
 		if (arg0.getSource() == this.addLumiere) {
 			vue.puissanceLumiere += 0.1;
 			vue.revalidate();
@@ -224,48 +212,6 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 			ms.getPan().removeAll();
 			ms.getPan().add(vue);
 			vue.repaint();
-		}
-
-		if (arg0.getSource() == this.motsCles) {
-			System.out.println("On va afficher les mots cles de l'objet");
-			ModificationPanel mb = new ModificationPanel(this.ms);
-		}
-
-		if (arg0.getSource() == this.infosObjet) {
-
-			/*
-			 * Etape UN : on recupere le nom de l'objet courant
-			 */
-
-			if (loadBdd == true) {
-				System.out.println(" infos objets : Load Bdd = true");
-				this.mv = pol.vm;
-			}
-
-			else if (load == true) {
-				System.out.println(" infos objets : Load = true");
-			}
-
-			else {
-				System.out.println("infos objets : Par defaut");
-				this.mv = ms.vm;
-
-			}
-
-			System.out.println("Voici les infos de l'objet : ");
-			Connexion con = new Connexion();
-			this.listObjet = con.getListObjet();
-			Set<String> keyS = listObjet.keySet();
-			Iterator<String> it = keyS.iterator();
-			while (it.hasNext()) {
-				String st = (String) it.next();
-				System.out.println("On a : " + st);
-			}
-
-			System.out.println("infos objets : " + this.mv.toString());
-
-			con.closeConnexion();
-
 		}
 
 		if (arg0.getSource() == this.reload) {
@@ -521,64 +467,66 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	}
 
 	/**
-	 * Permet de charger un fichier depuis la BDD
-	 */
-	private void loadFromBdd() {
-		loadBdd = true;
-		load = false;
-		vue = new VueVolume();
-		System.out.println("menu barre : load bdd");
-		JPanel pan = this.ms.getPan();
-		pan.removeAll();
-		pan.setLayout(null);
-		pol = new ListObjetPanel(this.ms); // test
-
-		this.mv = pol.getMv();
-		pan.add(pol);
-		pan.setBounds(0, 30, 1024, 700);
-		this.ms.setPan(pan);
-		this.ms.getPan().repaint();
-		this.ms.revalidate();
-
-		// this.z
-		System.out.println("LOAD BDD : fin");
-	}
-
-	/**
 	 * Permet de sauvegarder un fichier depuis le PC dans la BDD
+	 * @throws FichierException 
 	 */
-	private void sauvegarder() {
-		try {
-
-			FiltreSimple gts = new FiltreSimple("Fichiers GTS", ".gts");
-			JFileChooser jf = new JFileChooser();
-			boolean estGts = false;
-			jf.addChoosableFileFilter(gts);
-			jf.showOpenDialog(null);
-			// Récupération du fichier
-			File fichier = jf.getSelectedFile();
-
-			if (fichier == null)
-				return;
-			String extension = fichier.getName().substring(
-					fichier.getName().length() - 4, fichier.getName().length());
-			if (extension.equals(".gts")) {
-				estGts = true;
-			} else
-				try {
-					throw new FichierException("Format de fichier incorrect.");
-				} catch (FichierException e1) {
-					e1.printStackTrace();
-				}
-			if (estGts) {
-				LireGts.lireFichier(fichier);
-				copyFile(fichier);
+	private void sauvegarder() throws FichierException {
+		load = true;
+		loadBdd = false;
+		FiltreSimple gts2 = new FiltreSimple("Fichiers GTS", ".gts");
+		JFileChooser jf2 = new JFileChooser();
+		boolean estGts2 = false;
+		jf2.addChoosableFileFilter(gts2);
+		jf2.showOpenDialog(null);
+		// Récupération du fichier
+		File fichier2 = jf2.getSelectedFile();
+		// Si on annule ou ferme le jf
+		if (fichier2 == null)
+			return;
+		jf2.setCurrentDirectory(Paths.get("./res/models").toAbsolutePath()
+				.toFile());
+		String extension2 = fichier2.getName().substring(
+				fichier2.getName().length() - 4, fichier2.getName().length());
+		if (extension2.equals(".gts")) {
+			estGts2 = true;
+		} else
+			try {
+				throw new FichierException("Format de fichier incorrect.");
+			} catch (FichierException e1) {
+				e1.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (estGts2) {
+			this.mv = LireGts.lireFichier(fichier2);
+			System.out.println("this.mv =  " + this.mv.toString());
+			JPanel pan = this.ms.getPan();
+			vue = new VueVolume();
+			vue.setBounds(0, 0, 1024, 700);
+			vue.suppMouvementListener();
+			vue.suppMouseWheel();
+			vue.setVolumeModel(this.mv);
+			vue.addMouseMotionListener(DeplacerVolume
+					.getMouseController(this.mv));
+			vue.addMouseWheelListener(DeplacerVolume
+					.getMouseWheelController(this.mv));
+			copyFile(fichier2);
+			this.ms.getSearchBar().update();
+			vue.setVisible(true);
+			vue.setBackground(Color.gray);
+			pan.setBounds(0, 30, 1024, 700);
+			pan.setLayout(null);
+			vue.revalidate();
+			pan.removeAll();
+			pan.add(vue);
+			pan.repaint();
+			this.ms.setPan(pan);
+			this.ms.add(this.ms.getPan());
+			this.ms.getPan().repaint();
+			this.ms.revalidate();
 		}
 
 	}
+	
+	
 
 	/**
 	 * Copie le fichier source dans le fichier resultat return vrai si cela
