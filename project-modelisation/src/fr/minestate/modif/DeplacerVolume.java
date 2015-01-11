@@ -143,6 +143,8 @@ public class DeplacerVolume {
 				if (SwingUtilities.isLeftMouseButton(arg0)) {
 					if (vol.vue != null) {
 						vol.vue.setFdf(false);
+						System.out.println("Deplacer Volume : on enleve les FDF");
+						vol.vue.updateUI();
 					}
 				}
 
