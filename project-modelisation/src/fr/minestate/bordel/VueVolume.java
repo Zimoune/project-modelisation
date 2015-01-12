@@ -32,12 +32,10 @@ public class VueVolume extends JPanel implements Observer {
 	public int colorR = 100;
 	public int colorG = 100;
 	public int colorB = 200;
-	public Color couleur = new Color(colorR,colorG,colorB);
 	
-	public float xSun = 0f; //modifiable de -5 à 5
-	public float ySun = 0f; //modifiable de -5 à 5
+	public float xSun = 0f;
+	public float ySun = 0f;
 	public final float zSun = 1f; //la direction se fait toujours vers l'objet
-	public Vecteur vecteurSun = new Vecteur(xSun,ySun,zSun);
 	
 	
 	public ModelVolume modelVolume;
@@ -176,6 +174,7 @@ public class VueVolume extends JPanel implements Observer {
 		Polygon p = new Polygon();
 		for (Point m : points)
 			p.addPoint((int) (m.getX()),(int)m.getY());
+		Color couleur = new Color(colorR,colorG,colorB);
 		g.setColor(illumine(couleur, angleRad, puissanceLumiere));
 		g.fillPolygon(p);
 	}
