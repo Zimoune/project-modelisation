@@ -91,7 +91,6 @@ public class SearchBar extends JPanel implements KeyListener,
 		Map<String, String> listObjectByKeyword = con.getObjectsByKeywordLike(this.jtf.getText());
 		Set<String> set = listObjectByKeyword.keySet();
 		Iterator<String> it = set.iterator();
-		int i = 0;
 		while (it.hasNext()) {
 			//Si il ne contient pas déjà l'objet on l'ajoute
 			String key = it.next();
