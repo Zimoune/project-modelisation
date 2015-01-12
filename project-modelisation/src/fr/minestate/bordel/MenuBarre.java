@@ -45,6 +45,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	private Map<String, String> listObjet; // nom & lien
 	JSlider slider;
 	JFloatSlider jfs;
+	JFloatSlider jns;
 	
 	private String nameToAdd;
 
@@ -163,6 +164,11 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 		jfs = new JFloatSlider(0, 0.0f, 2.5f, 1.25f, 0.5f);
 		jfs.addChangeListener(this);
 		this.add(jfs);
+		
+		// Controleur de la longueur des normales
+		jns = new JFloatSlider(0, 0.0f, 3f, 0.75f, 1f);
+		jns.addChangeListener(this);
+		this.add(jns);
 
 	}
 	/**
@@ -609,14 +615,8 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
 
-		System.out.println("Puissance lumiere initiale = "
-				+ vue.puissanceLumiere);
-		System.out.println("OK cowboy");
-		System.out.println("Value du slider : " + jfs.getFloatValue());
-		System.out.println("nom objet : " + vue.modelVolume.nom);
 		vue.puissanceLumiere = (jfs.getFloatValue());
-		System.out
-				.println("Puissance lumiere finale = " + vue.puissanceLumiere);
+		vue.longeurNormale = (jns.getFloatValue());
 		vue.revalidate();
 		ms.getPan().removeAll();
 		ms.getPan().add(vue);
