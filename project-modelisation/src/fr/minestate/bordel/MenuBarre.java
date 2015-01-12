@@ -620,6 +620,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 		vue.revalidate();
 		ms.getPan().removeAll();
 		ms.getPan().add(vue);
+		// update vue
 		vue.repaint();
 
 	}
