@@ -26,7 +26,19 @@ import fr.minestate.utils.Vecteur;
 public class VueVolume extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
-	public float puissanceLumiere = 1.25f;
+	public float puissanceLumiere = 1.20f;
+	public float longeurNormale = 0.5f;
+	
+	public int colorR = 100;
+	public int colorG = 100;
+	public int colorB = 200;
+	public Color couleur = new Color(colorR,colorG,colorB);
+	
+	public float xSun = 0; //modifiable de -5 à 5
+	public float ySun = 0; //modifiable de -5 à 5
+	public final float zSun = 1; //la direction se fait toujours vers l'objet
+	public Vecteur vecteurSun = new Vecteur(xSun,ySun,zSun);
+	
 	
 	public ModelVolume modelVolume;
 	
@@ -127,14 +139,15 @@ public class VueVolume extends JPanel implements Observer {
 
 
 	/**
-	 * Cette fonction permet de definir la couleur de la face selon son exposition ï¿½ la lumiere
+	 * Cette fonction permet de definir la couleur de la face selon son exposition a la lumiere
 	 * @param c couleur de base du triangle a afficher
 	 * @param angle en radian entre la normale et le vecteur lumiere
-	 * @param power puissance de luminositï¿½
+	 * @param power puissance de luminosite
 	 */
 	private Color illumine(Color c, float angle, float power) {
 		if (angle<0 || angle>(Math.PI/2))
 			return Color.black;
+		// Utilisant une variable puissance de lumière on teste les variables couleurs pour qu'elles ne dépassent pas 255
 		int nvRed = (int) (power*(c.getRed() * Math.cos(angle)));
 		if (nvRed>255)
 			nvRed = 255;
@@ -150,26 +163,24 @@ public class VueVolume extends JPanel implements Observer {
 
 
 	/**
-	 * Cette methode permet d'afficher un triangle
+	 * Cette methode permet d'afficher un triangle avec la bonne couleur
 	 * @param t le triangle a afficher
 	 * @param g permet d'afficher
 	 */
 	private void dessineTriangle(Face t, Graphics g) {
 		Point[] points = t.getCoords();
-		Vecteur vecteurSun = new Vecteur(0,0,1);
 		Vecteur normal = new Vecteur();
 		normal = normal.normale(points);
 		float angleRad = normal.calculAngle(vecteurSun, normal);
 		Polygon p = new Polygon();
 		for (Point m : points)
 			p.addPoint((int) (m.getX()),(int)m.getY());
-		Color couleur = new Color(100,100,200);
 		g.setColor(illumine(couleur, angleRad, puissanceLumiere));
 		g.fillPolygon(p);
 	}
 
 	/**
-	 * Permet de dessiner les normales aux faces : on l'utilise pas toujours
+	 * Permet de dessiner les normales aux faces : on ne l'utilise pas toujours
 	 * @param t
 	 * @param g
 	 */
@@ -177,8 +188,13 @@ public class VueVolume extends JPanel implements Observer {
 		Point[] points = t.getCoords();
 		Vecteur normal = new Vecteur();
 		normal = normal.normale(points);
+		int barycentreX = (int) normal.barycentreFace(points).getX();
+		int barycentreY = (int) normal.barycentreFace(points).getY();
+		int pointDeNormaleX = (int) normal.pointDeVecteur(normal.barycentreFace(points), normal, longeurNormale).getX();
+		int pointDeNormaleY = (int) normal.pointDeVecteur(normal.barycentreFace(points), normal, longeurNormale).getY();
+		
 		g.setColor(Color.red);
-		g.drawLine((int) normal.barycentreFace(points).getX(), (int) normal.barycentreFace(points).getY(), (int) normal.pointDeVecteur(normal.barycentreFace(points), normal, 0.5f).getX(), (int) normal.pointDeVecteur(normal.barycentreFace(points), normal, 0.5f).getY());
+		g.drawLine(barycentreX, barycentreY, pointDeNormaleX, pointDeNormaleY);
 	}
 	
 	
