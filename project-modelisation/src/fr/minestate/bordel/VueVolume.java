@@ -169,6 +169,7 @@ public class VueVolume extends JPanel implements Observer {
 	 */
 	private void dessineTriangle(Face t, Graphics g) {
 		Point[] points = t.getCoords();
+		Vecteur vecteurSun = new Vecteur(xSun, ySun, zSun);
 		Vecteur normal = new Vecteur();
 		normal = normal.normale(points);
 		float angleRad = normal.calculAngle(vecteurSun, normal);
