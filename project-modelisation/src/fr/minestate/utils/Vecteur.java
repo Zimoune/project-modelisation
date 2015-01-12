@@ -80,7 +80,7 @@ public class Vecteur {
 	 * @param p
 	 * @return
 	 */
-	public Vecteur normale(Point[] p) {
+	public Vecteur normale(Point[] p) { // le tableau de point contient les coordonnées d'une face
 		Vecteur vue = new Vecteur(0,0,-1); //La vue étant fixe on la définie ici pour tester l'orientation des faces
 		//Vecteur correspondant a  AB
 		Vecteur n1 = new Vecteur(p[1].getX()-p[0].getX(),p[1].getY()-p[0].getY(),p[1].getZ()-p[0].getZ());
