@@ -69,11 +69,21 @@ public class DeplacerVolume {
 				}
 
 				if (SwingUtilities.isRightMouseButton(e)) {
+					
+					if (vol.vue != null) {
+						vol.vue.setFdf(true); // test
+					}
+					
 					vol.rotation(Rotation.Y_AXIS, e.getX() - xSouris);
 					vol.rotation(Rotation.X_AXIS, ySouris - e.getY());
 				}
 
 				if (SwingUtilities.isMiddleMouseButton(e)) {
+					
+					if (vol.vue != null) {
+						vol.vue.setFdf(true); // test
+					}
+					
 					try {
 						vol.rotation(new Matrice(new float[][] {
 								{ e.getX() - xSouris }, { ySouris - e.getY() },
@@ -140,10 +150,9 @@ public class DeplacerVolume {
 			 */
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				if (SwingUtilities.isLeftMouseButton(arg0)) {
+				if (SwingUtilities.isLeftMouseButton(arg0) || SwingUtilities.isMiddleMouseButton(arg0) || SwingUtilities.isRightMouseButton(arg0)) {
 					if (vol.vue != null) {
 						vol.vue.setFdf(false);
-						System.out.println("Deplacer Volume : on enleve les FDF");
 						vol.vue.updateUI();
 					}
 				}
