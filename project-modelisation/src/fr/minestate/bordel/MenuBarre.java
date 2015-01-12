@@ -496,32 +496,37 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 				e1.printStackTrace();
 			}
 		if (estGts2) {
-			this.mv = LireGts.lireFichier(fichier2);
-			System.out.println("this.mv =  " + this.mv.toString());
-			JPanel pan = this.ms.getPan();
-			vue = new VueVolume();
-			vue.setBounds(0, 0, 1024, 700);
-			vue.suppMouvementListener();
-			vue.suppMouseWheel();
-			vue.setVolumeModel(this.mv);
-			vue.addMouseMotionListener(DeplacerVolume
-					.getMouseController(this.mv));
-			vue.addMouseWheelListener(DeplacerVolume
-					.getMouseWheelController(this.mv));
-			copyFile(fichier2);
-			this.ms.getSearchBar().update();
-			vue.setVisible(true);
-			vue.setBackground(Color.gray);
-			pan.setBounds(0, 30, 1024, 700);
-			pan.setLayout(null);
-			vue.revalidate();
-			pan.removeAll();
-			pan.add(vue);
-			pan.repaint();
-			this.ms.setPan(pan);
-			this.ms.add(this.ms.getPan());
-			this.ms.getPan().repaint();
-			this.ms.revalidate();
+			try{
+				this.mv = LireGts.lireFichier(fichier2);
+				System.out.println("this.mv =  " + this.mv.toString());
+				JPanel pan = this.ms.getPan();
+				vue = new VueVolume();
+				vue.setBounds(0, 0, 1024, 700);
+				vue.suppMouvementListener();
+				vue.suppMouseWheel();
+				vue.setVolumeModel(this.mv);
+				vue.addMouseMotionListener(DeplacerVolume
+						.getMouseController(this.mv));
+				vue.addMouseWheelListener(DeplacerVolume
+						.getMouseWheelController(this.mv));
+				copyFile(fichier2);
+				this.ms.getSearchBar().update();
+				vue.setVisible(true);
+				vue.setBackground(Color.gray);
+				pan.setBounds(0, 30, 1024, 700);
+				pan.setLayout(null);
+				vue.revalidate();
+				pan.removeAll();
+				pan.add(vue);
+				pan.repaint();
+				this.ms.setPan(pan);
+				this.ms.add(this.ms.getPan());
+				this.ms.getPan().repaint();
+				this.ms.revalidate();
+			}catch(Exception e){
+				System.out.println("Erreur durant la lecture");
+			}
+			
 		}
 
 	}

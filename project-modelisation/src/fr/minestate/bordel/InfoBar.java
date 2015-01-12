@@ -97,7 +97,6 @@ public class InfoBar extends JPanel implements MouseListener {
 	 * @param chemin
 	 */
 	public void setInfos (String nom, String chemin) {
-		System.out.println(nom + " / " + this.fen.getDefaultObjet());
 		if(nom.equals(this.fen.getDefaultObjet())){
 			this.remove(this.supprimerObjet);
 			this.repaint();

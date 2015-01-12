@@ -268,4 +268,20 @@ public class Connexion {
 		return list;
 	}
 
+	public Map<String, String> getObjectsByKeywordLike(String keyword) {
+		Map<String, String> mapObjet = new HashMap<String, String>();
+		ResultSet rs = this.getExecuteStatement("SELECT nom, lien FROM objets WHERE id IN (SELECT id FROM keywords WHERE keywords LIKE '"+keyword+"%')");
+		System.out.println("oui");
+		try {
+			while(rs.next()){
+				System.out.println("++++++"+rs.getString("nom"));
+				mapObjet.put(rs.getString("nom"), rs.getString("lien"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return mapObjet;
+	}
+
 }

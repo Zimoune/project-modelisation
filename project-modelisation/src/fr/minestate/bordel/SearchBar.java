@@ -88,6 +88,17 @@ public class SearchBar extends JPanel implements KeyListener,
 		con = new Connexion();
 		this.listObject.clear();
 		this.listObject = con.getObjectsByLike(this.jtf.getText());
+		Map<String, String> listObjectByKeyword = con.getObjectsByKeywordLike(this.jtf.getText());
+		Set<String> set = listObjectByKeyword.keySet();
+		Iterator<String> it = set.iterator();
+		int i = 0;
+		while (it.hasNext()) {
+			//Si il ne contient pas déjà l'objet on l'ajoute
+			String key = it.next();
+			if(!this.listObject.containsKey(key)){
+				this.listObject.put(key, listObjectByKeyword.get(key));
+			}
+		}
 		this.jcb.clearSelection();
 		this.getListObjet();
 		con.closeConnexion();
@@ -103,7 +114,7 @@ public class SearchBar extends JPanel implements KeyListener,
 		int i = 0;
 		System.out.println("+++++++++");
 		while (it.hasNext()) {
-			list[i] = (String) it.next();
+			list[i] = it.next();
 			System.out.println(list[i]);
 			i++;
 			
