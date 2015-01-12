@@ -12,7 +12,10 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -35,7 +38,7 @@ import fr.minestate.utils.LireGts;
  * 
  */
 public class MenuBarre extends JMenuBar implements Observer, ActionListener,
-		ChangeListener {
+		ChangeListener{
 	private VolumeChangerModel volumeSetModel;
 	private Fenetre ms;
 	public VueVolume vue;
@@ -46,7 +49,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	JSlider slider;
 	JFloatSlider jfs;
 	JFloatSlider jns;
-	
+	private Color color = new Color(100, 100, 200);
 	private String nameToAdd;
 
 	/*
@@ -68,13 +71,14 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	 * Items du menu edit
 	 */
 	private JMenuItem addLumiere;
+	private JMenuItem changeColor;
 	private JMenuItem delLumiere;
 	private JMenuItem reload;
 	private JMenuItem filDeFer;
 	private JMenuItem motsCles;
 	private JMenuItem FullScreen;
 	public ListObjetPanel lop2 = null;
-
+	private JColorChooser jcc;
 	private JMenuItem normales;
 
 	boolean loadBdd = false;
@@ -112,20 +116,21 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 
 
 
-		save = new JMenuItem("Save");
+		save = new JMenuItem("Sauvegarder");
 		save.addActionListener(this);
-		open = new JMenuItem("Open");
+		open = new JMenuItem("Ouvrir");
 		open.addActionListener(this);
 
-		exit = new JMenuItem("Exit");
+		exit = new JMenuItem("Quitter");
 		exit.addActionListener(this);
 
 		addLumiere = new JMenuItem("+ lumiere");
 		addLumiere.addActionListener(this);
-
+		
+		changeColor = new JMenuItem("Couleur objet");
 		delLumiere = new JMenuItem("- lumiere");
 		delLumiere.addActionListener(this);
-
+		changeColor.addActionListener(this);
 		filDeFer = new JMenuItem("Fil de fer");
 		filDeFer.addActionListener(this);
 
@@ -152,19 +157,21 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 		edit.add(filDeFer);
 		edit.add(motsCles);
 		edit.add(FullScreen);
+		edit.add(changeColor);
 
 
 
 		add(file);
 		add(edit);
 
-		this.setBackground(new Color(27, 126, 179));
-
+		this.setBackground(Color.lightGray);
+//		this.setBackground(new Color(27, 126, 179));
+		this.add(new JLabel("Luminosité: "));
 		// Controleur de puissance lumineuse
-		jfs = new JFloatSlider(0, 0.0f, 2.5f, 1.25f, 0.5f);
+		jfs = new JFloatSlider(0, 0.0f, 2.5f, 1.20f, 0.5f);
 		jfs.addChangeListener(this);
 		this.add(jfs);
-		
+		this.add(new JLabel("Longueur normales: "));
 		// Controleur de la longueur des normales
 		jns = new JFloatSlider(0, 0.0f, 3f, 0.75f, 1f);
 		jns.addChangeListener(this);
@@ -314,6 +321,36 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 			this.ms.getPan().repaint();
 			this.ms.revalidate();
 
+		}
+		if(arg0.getSource() == this.changeColor){
+			/*JFrame frame = new JFrame();
+			ChangeColorFrame panel = new ChangeColorFrame(this.vue);
+			frame.setPreferredSize(new Dimension(400, 500));
+			frame.setVisible(true);
+			frame.getContentPane().add(panel);
+			frame.pack();*/
+			jcc = new JColorChooser();
+			ActionListener okActionListener = new ActionListener() {
+			      public void actionPerformed(ActionEvent actionEvent) {
+			        vue.colorB = jcc.getColor().getBlue();
+			        vue.colorR = jcc.getColor().getRed();
+			        vue.colorG = jcc.getColor().getGreen();
+			        vue.repaint();
+			      }
+			    };
+
+			    // For cancel selection, change button background to red
+			    ActionListener cancelActionListener = new ActionListener() {
+			      public void actionPerformed(ActionEvent actionEvent) {
+			        System.out.println("cancled");
+			      }
+			    };
+
+			    final JDialog dialog = JColorChooser.createDialog(null, "Change Button Background", true,
+			        jcc, okActionListener, cancelActionListener);
+
+			    dialog.setVisible(true);
+			
 		}
 
 		// active ou desactive l'affichage des normales aux faces
@@ -623,6 +660,14 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 		// update vue
 		vue.repaint();
 
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 }
