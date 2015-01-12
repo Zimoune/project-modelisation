@@ -34,9 +34,9 @@ public class VueVolume extends JPanel implements Observer {
 	public int colorB = 200;
 	public Color couleur = new Color(colorR,colorG,colorB);
 	
-	public float xSun = 0; //modifiable de -5 à 5
-	public float ySun = 0; //modifiable de -5 à 5
-	public final float zSun = 1; //la direction se fait toujours vers l'objet
+	public float xSun = 0f; //modifiable de -5 à 5
+	public float ySun = 0f; //modifiable de -5 à 5
+	public final float zSun = 1f; //la direction se fait toujours vers l'objet
 	public Vecteur vecteurSun = new Vecteur(xSun,ySun,zSun);
 	
 	
