@@ -1,4 +1,4 @@
-package fr.minestate.bordel;
+package fr.minestate.window;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -166,7 +166,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 
 		this.setBackground(Color.lightGray);
 //		this.setBackground(new Color(27, 126, 179));
-		this.add(new JLabel("Luminosité: "));
+		this.add(new JLabel("Luminosite: "));
 		// Controleur de puissance lumineuse
 		jfs = new JFloatSlider(0, 0.0f, 2.5f, 1.20f, 0.5f);
 		jfs.addChangeListener(this);

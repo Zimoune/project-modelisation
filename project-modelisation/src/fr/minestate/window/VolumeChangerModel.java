@@ -3,7 +3,7 @@
  * @author scta
  *
  */
-package fr.minestate.bordel;
+package fr.minestate.window;
 
 import java.util.ArrayList;
 import java.util.Observable;

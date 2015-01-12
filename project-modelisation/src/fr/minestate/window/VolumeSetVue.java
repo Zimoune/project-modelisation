@@ -2,7 +2,7 @@
  * Permet de gerer l'ensemble des VolumeModel
  *
  */
-package fr.minestate.bordel;
+package fr.minestate.window;
 
 import java.util.Observable;
 import java.util.Observer;

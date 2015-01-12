@@ -1,4 +1,4 @@
-package fr.minestate.bordel; 
+package fr.minestate.window; 
 
 import java.awt.Color;
 import java.awt.Dimension;

@@ -1,4 +1,4 @@
-package fr.minestate.bordel;
+package fr.minestate.window;
 
 import java.awt.Dimension;
 import java.util.ArrayList;

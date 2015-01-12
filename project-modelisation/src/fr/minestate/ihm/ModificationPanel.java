@@ -17,10 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import fr.minestate.bdd.Connexion;
-import fr.minestate.bordel.*;
-import fr.minestate.bordel.MenuBarre;
-import fr.minestate.bordel.ModelVolume;
-import fr.minestate.bordel.VolumeChangerModel;
+import fr.minestate.window.*;
 
 /**
  * Permet de proposer des modifications concernant l'objet actuel (changement nom, mots cles, etc)

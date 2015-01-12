@@ -1,7 +1,7 @@
 /**
  * Classe permettant de creer une barre de recherche d'objets dans la BDD
  */
-package fr.minestate.bordel;
+package fr.minestate.window;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

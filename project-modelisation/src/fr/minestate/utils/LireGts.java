@@ -6,11 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import fr.minestate.bordel.ModelVolume;
-import fr.minestate.bordel.VolumeChangerModel;
 import fr.minestate.exception.FichierException;
 import fr.minestate.figure.Segment;
 import fr.minestate.figure.Face;
+import fr.minestate.window.ModelVolume;
+import fr.minestate.window.VolumeChangerModel;
 
 /**
  * Permet de lire le fichierGTS et d'en deduire les listePoints, les segment et les listeTriangles

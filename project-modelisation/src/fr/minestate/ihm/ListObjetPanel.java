@@ -12,11 +12,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import fr.minestate.bdd.Connexion;
-import fr.minestate.bordel.*;
 import fr.minestate.exception.FichierException;
 import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.LireGts;
+import fr.minestate.window.*;
 
 /**
  * Permet de lister les objets de la bdd

@@ -5,9 +5,11 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+
 import javax.swing.SwingUtilities;
-import fr.minestate.bordel.ModelVolume;
+
 import fr.minestate.exception.IncompatibleSizeException;
+import fr.minestate.window.ModelVolume;
 
 /**
  * Permet de controler un volume

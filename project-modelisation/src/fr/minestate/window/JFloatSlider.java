@@ -1,7 +1,7 @@
 /**
  * Cette classe sert a definir un JFloatSlider, utilise pour faire varier l'intensite de la puissance lumineuse de l'objet.
  */
-package fr.minestate.bordel;
+package fr.minestate.window;
 
 import java.awt.Color;
 import java.util.Hashtable;

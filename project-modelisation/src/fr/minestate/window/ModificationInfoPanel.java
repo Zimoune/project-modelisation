@@ -1,7 +1,7 @@
 /**
  * Ne sert a rien on va le virer 
  */
-package fr.minestate.bordel;
+package fr.minestate.window;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

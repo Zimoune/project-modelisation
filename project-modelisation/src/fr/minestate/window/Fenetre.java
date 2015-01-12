@@ -1,4 +1,4 @@
-package fr.minestate.bordel;
+package fr.minestate.window;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -77,7 +77,7 @@ public class Fenetre extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
-		this.setTitle("Modélisation");
+		this.setTitle("Modelisation");
 		this.setPreferredSize(new Dimension(Width, Height));
 		this.volumeChangerModel = new VolumeChangerModel();
 		this.menuBarre = new MenuBarre(volumeChangerModel, this, true);
