@@ -81,37 +81,23 @@ public class Vecteur {
 	 * @return
 	 */
 	public Vecteur normale(Point[] p) {
-		Vecteur vue = new Vecteur(0,0,-1);
-		//Vecteur correspondant Ã  AB
+		Vecteur vue = new Vecteur(0,0,-1); //La vue étant fixe on la définie ici pour tester l'orientation des faces
+		//Vecteur correspondant a  AB
 		Vecteur n1 = new Vecteur(p[1].getX()-p[0].getX(),p[1].getY()-p[0].getY(),p[1].getZ()-p[0].getZ());
-		//Vecteur correspondant Ã  AC
+		//Vecteur correspondant a  AC
 		Vecteur n2 = new Vecteur(p[2].getX()-p[0].getX(),p[2].getY()-p[0].getY(),p[2].getZ()-p[0].getZ());
 		//Produit Vectoriel des 2 vecteurs prÃ©cÃ©dents : obtention d'un vecteur normal Ã  la face
-		//On vï¿½rifie que la camï¿½ra observe le bon cï¿½tï¿½ de la face
 		Vecteur n = produitVectoriel(n1,n2);
-		if(bonCote(vue, n)) {
-			return n;
+		if(produitScalaire(vue,n)<0) { //on verifie que le vecteur vue et la normale de la face soient bien orientes à l'opposé
+			return n;				   //afin de calculer l'angle dans le bon sens pour le calcul de la lumiere
 		} else {
 			return produitVectoriel(n2,n1);
 		}
-	}
-
-	/**
-	 * Retourne true si le vecteur est du bon cote de la vue false sinon
-	 * @param vue
-	 * @param v
-	 * @return
-	 */
-	private boolean bonCote(Vecteur vue, Vecteur v) {
-		if (produitScalaire(vue,v)>=0)
-			return false;
-		else return true;
-	}
-	
+	}	
 	
 
 	/**
-	 * Calcul l'angle que forme un vecteur avec un autre et le retourne
+	 * Calcule l'angle que forme un vecteur avec un autre et le retourne
 	 * @param sun
 	 * @param n
 	 * @return
@@ -121,7 +107,7 @@ public class Vecteur {
 	}
 
 	/**
-	 * Calcul le barycentre d'une face passe sous la forme d'un tableau de points et le retourne
+	 * Calcule le barycentre d'une face passe sous la forme d'un tableau de points et le retourne
 	 * @param p
 	 * @return
 	 */
@@ -133,7 +119,7 @@ public class Vecteur {
 	}
 	
 	/**
-	 * Calcul le point de vecteur et le retourne
+	 * Calcule les coordonnées d'un point du vecteur en paramètre à une certaine longeure rationnelle et le retourne
 	 * @param pBary
 	 * @param normal
 	 * @param longueur
@@ -148,7 +134,7 @@ public class Vecteur {
 	}
 
 	/**
-	 * Calcul le produit vectoriel de deux vecteurs et le retourne sous forme de vecteur
+	 * Calcule le produit vectoriel de deux vecteurs et le retourne sous forme de vecteur
 	 * @param v1
 	 * @param v2
 	 * @return
@@ -161,7 +147,7 @@ public class Vecteur {
 	}
 
 	/**
-	 * Calcul le produit scalaire de deux vecteurs et le retourne sous forme de float
+	 * Calcule le produit scalaire de deux vecteurs et le retourne sous forme de float
 	 * @param v1
 	 * @param v2
 	 * @return
