@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +74,8 @@ public class Connexion {
 		}
 		return i;
 	}
+	
+	
 
 	public ResultSet getExecuteStatement(String query) {
 		ResultSet r = null;
@@ -217,7 +220,7 @@ public class Connexion {
 		ResultSet rs = this.getExecuteStatement("SELECT * FROM objets WHERE nom='"+objet+"';");
 		try {
 			while(rs.next()){
-				System.out.println(rs.getString("ids"));
+				System.out.println(rs.getString("id"));
 				System.out.println(rs.getString("nom"));
 			}
 			rs.close();
@@ -229,14 +232,17 @@ public class Connexion {
 	
 	public int addKeyWords(String objet, ArrayList<String> list){
 		int idObjet;
-		ResultSet rs = this.getExecuteStatement("SELECT ids FROM objets WHERE nom='"+objet+"';");
+		ResultSet rs = this.getExecuteStatement("SELECT id FROM objets WHERE nom='"+objet+"';");
 		int i = -1;
 		try {
 			if(rs.next()){
 				System.out.println("Objet trouvé");
 				idObjet = Integer.parseInt(rs.getString("id"));
-				for(String s:list)
-				i = this.getUpdateStatement("INSERT INTO keywords VALUES("+idObjet+", '"+s+"')");
+				for(String s:list){
+					Statement stmt = this.connexion.createStatement();
+					stmt.executeUpdate("INSERT INTO keywords VALUES("+idObjet+", '"+s+"')");
+					stmt.close();
+				}
 			}
 			else
 				System.out.println("Objet inconnu");

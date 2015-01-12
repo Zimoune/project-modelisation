@@ -28,6 +28,22 @@ public class Fenetre extends JFrame {
 	private SearchBar searchBar = new SearchBar(this);
 	public InfoBar info; // rajout
 	private String defaultObjet = "cube";
+	static int Height = 700;
+	static int Width = 1024;
+	
+	/**
+	 * Modifie les valeurs de hauteur/largeur de la Fenetre et vue : Active ou Desactive le mode plein ecran
+	 */
+	public void toggleFullScreen() {
+		if(Width == Height){
+			Height = (int)getToolkit().getScreenSize().getHeight() - 40;
+			Width = (int)getToolkit().getScreenSize().getWidth();
+		}
+		else{
+			Height = Width;
+			Width = Height;
+		}
+	}
 	
 
 	/**
@@ -62,7 +78,7 @@ public class Fenetre extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		this.setTitle("Modélisation");
-		this.setPreferredSize(new Dimension(1024, 728));
+		this.setPreferredSize(new Dimension(Width, Height));
 		this.volumeChangerModel = new VolumeChangerModel();
 		this.menuBarre = new MenuBarre(volumeChangerModel, this, true);
 
@@ -99,7 +115,7 @@ public class Fenetre extends JFrame {
 				this.add(info, BorderLayout.SOUTH);// rajout
 				JPanel panel = this.getPan();
 				VueVolume vue = new VueVolume();
-				vue.setBounds(0, 0, 1024, 700);
+				vue.setBounds(0, 0, Width, Height);
 				vue.suppMouvementListener();
 				vue.suppMouseWheel();
 				vm.vue = vue;

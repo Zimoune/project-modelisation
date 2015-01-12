@@ -1,19 +1,17 @@
 package fr.minestate.bordel;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
 
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -26,7 +24,6 @@ import javax.swing.event.ChangeListener;
 import fr.minestate.bdd.Connexion;
 import fr.minestate.exception.FichierException;
 import fr.minestate.ihm.ListObjetPanel;
-import fr.minestate.ihm.ModificationPanel;
 import fr.minestate.modif.DeplacerVolume;
 import fr.minestate.utils.FiltreSimple;
 import fr.minestate.utils.LireGts;
@@ -48,6 +45,8 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	private Map<String, String> listObjet; // nom & lien
 	JSlider slider;
 	JFloatSlider jfs;
+	
+	private String nameToAdd;
 
 	/*
 	 * Menus déroulant
@@ -72,6 +71,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	private JMenuItem reload;
 	private JMenuItem filDeFer;
 	private JMenuItem motsCles;
+	private JMenuItem FullScreen;
 	public ListObjetPanel lop2 = null;
 
 	private JMenuItem normales;
@@ -134,6 +134,9 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 		motsCles = new JMenuItem("Mots clefs");
 		motsCles.addActionListener(this);
 
+		FullScreen = new JMenuItem("FullScreen");
+		FullScreen.addActionListener(this);
+		
 		normales = new JMenuItem("Normales");
 		normales.addActionListener(this);
 		edit.add(normales);
@@ -147,6 +150,8 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 		edit.add(reload);
 		edit.add(filDeFer);
 		edit.add(motsCles);
+		edit.add(FullScreen);
+
 
 
 		add(file);
@@ -212,6 +217,18 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 			ms.getPan().removeAll();
 			ms.getPan().add(vue);
 			vue.repaint();
+		}
+		if (arg0.getSource() == this.FullScreen) {
+			ms.toggleFullScreen();
+			ms.setPreferredSize(new Dimension(ms.Width,ms.Height));
+			ms.repaint();
+			vue.setBounds(0, 0, ms.Width,ms.Height);
+			vue.revalidate();
+			ms.getPan().removeAll();
+			ms.getPan().add(vue);
+			vue.repaint();
+			ms.pack();
+					
 		}
 
 		if (arg0.getSource() == this.reload) {
@@ -510,6 +527,8 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 				vue.addMouseWheelListener(DeplacerVolume
 						.getMouseWheelController(this.mv));
 				copyFile(fichier2);
+				
+				
 				this.ms.getSearchBar().update();
 				vue.setVisible(true);
 				vue.setBackground(Color.gray);
@@ -537,7 +556,7 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 	 * Copie le fichier source dans le fichier resultat return vrai si cela
 	 * réussit, false sinon
 	 */
-	public static boolean copyFile(File source) {
+	public boolean copyFile(File source) {
 		try {
 			// Declaration et ouverture des flux
 			java.io.FileInputStream sourceFile = new java.io.FileInputStream(
@@ -559,11 +578,15 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 					while ((nbLecture = sourceFile.read(buffer)) != -1) {
 						destinationFile.write(buffer, 0, nbLecture);
 					}
+					
 				} finally {
+					String chemin = "./res/models/" + source.getName();
 					destinationFile.close();
 					Connexion con = new Connexion();
-					con.ajouterObjet(name, "./res/models/" + source.getName());
 					con.closeConnexion();
+					con.ajouterObjet(name, chemin);
+					con.closeConnexion();
+					KeywordFrame keywordFrame = new KeywordFrame(name, chemin, this);
 				}
 			} finally {
 				sourceFile.close();
@@ -576,6 +599,10 @@ public class MenuBarre extends JMenuBar implements Observer, ActionListener,
 		return true;
 	}
 
+	public void updateInfoBar(String name, String chemin){
+		this.ms.info.setInfos(name, chemin);
+	}
+	
 	/**
 	 * Permet d'ecouter le JFloatSLider et de regler la lumiere
 	 */

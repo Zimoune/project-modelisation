@@ -34,6 +34,7 @@ public class InfoBar extends JPanel implements MouseListener {
 	int nombreMotsCle;
 	Map<String, String> info = new HashMap<String, String>();
 	private JButton supprimerObjet;
+	private String currentName;
 	
 
 	/**
@@ -63,12 +64,18 @@ public class InfoBar extends JPanel implements MouseListener {
 		con = new Connexion();
 		ArrayList<String> kw = con.getKeyWords(name);
 		con.closeConnexion();
-		String kwl = "Mots clés";
-		for(String s: kw){
-			kwl += "   "+s;
-			nombreMotsCle ++;
+		String kwl = "   Mots clés: ";
+		if(!kw.isEmpty()){
+			for(String s: kw){
+				kwl += "   "+s;
+				nombreMotsCle ++;
 
+			}
 		}
+		else
+			kwl = "";
+			
+		
 		System.out.println("On a : "+ nombreMotsCle + " mots cles");
 		// pour le nom
 		labName = new JLabel();
@@ -97,6 +104,7 @@ public class InfoBar extends JPanel implements MouseListener {
 	 * @param chemin
 	 */
 	public void setInfos (String nom, String chemin) {
+		this.currentName = nom;
 		if(nom.equals(this.fen.getDefaultObjet())){
 			this.remove(this.supprimerObjet);
 			this.repaint();
@@ -108,19 +116,25 @@ public class InfoBar extends JPanel implements MouseListener {
 		}
 			
 		con = new Connexion();
-		ArrayList<String> kw = con.getKeyWords(nom);
-		String kwl = "Mots clés";
+		ArrayList<String> kw = con.getKeyWords(this.currentName);
+		String kwl = "   Mots clés: ";
 		nombreMotsCle = 0;
-		for(String s: kw){
-			System.out.println("mot cle: "+s);
-			kwl += "   "+s;
-			nombreMotsCle ++;
+		if(!kw.isEmpty()){
+			for(String s: kw){
+				System.out.println("mot cle: "+s);
+				kwl += "   "+s;
+				nombreMotsCle ++;
+			}
 		}
+		else{
+			kwl = "";
+		}
+		
 		System.out.println("InfoBar, setInfos : nombreMotsCle = " + nombreMotsCle);
 		System.out.println();
 		
 		con.closeConnexion();
-		this.affichage.setText("Nom : " + nom + "   Chemin : " + chemin+"   "+kwl);
+		this.affichage.setText("Nom : " + this.currentName + "   Chemin : " + chemin+" "+kwl);
 		this.revalidate();
 	}
 
@@ -131,7 +145,7 @@ public class InfoBar extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent arg0) {
 		if(arg0.getSource() == this.supprimerObjet){
 			this.con = new Connexion();
-			con.supprimerObjet(name);
+			con.supprimerObjet(this.currentName);
 			con.closeConnexion();
 			this.fen.getSearchBar().update();
 		}

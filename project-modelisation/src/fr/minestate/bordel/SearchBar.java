@@ -163,7 +163,7 @@ public class SearchBar extends JPanel implements KeyListener,
 			JPanel panel = this.fen.getPan();
 			VueVolume vue = new VueVolume();
 			this.fen.vm.vue = vue;
-			vue.setBounds(0, 0, 1024, 700);
+			vue.setBounds(0, 0, fen.Width, fen.Height);
 			vue.suppMouvementListener();
 			vue.suppMouseWheel();
 			vue.setVolumeModel(this.fen.vm);
